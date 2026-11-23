@@ -315,7 +315,7 @@ function openMenu(def) {
     render() {
       const tabs = def.tabs.length > 1 ? `<div class="mtabs">${def.tabs.map((t, i) => `<span class="${i === sc.tab ? 'on' : ''}">${esc(t.name)}</span>`).join('')}</div>` : `<div class="mtabs"><span class="on">${esc(def.title)}</span></div>`;
       const items = def.tabs[sc.tab].items;
-      return tabs + '<div class="mlist">' + items.map((it, i) => `<div class="mi ${i === sc.sel ? 'sel' : ''}"><b>${i < 9 ? i + 1 : i === 9 ? 0 : '·'}</b> ${esc(it.l)}</div>`).join('') + '</div>';
+      return tabs + '<div class="mlst">' + items.map((it, i) => `<div class="mi ${i === sc.sel ? 'sel' : ''}"><b>${i < 9 ? i + 1 : i === 9 ? 0 : '·'}</b> ${esc(it.l)}</div>`).join('') + '</div>';
     },
     cmd(c) {
       const items = def.tabs[sc.tab].items;
