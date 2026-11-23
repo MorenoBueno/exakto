@@ -8,6 +8,8 @@
 
 Scientific · Offline · Open Source
 
+**[▶ Try the live demo](https://morenobueno.github.io/exakto/)**
+
 <img src="https://img.shields.io/badge/HTML5-1c2333?style=flat-square&logo=html5&logoColor=e34f26" alt="HTML5"> <img src="https://img.shields.io/badge/JavaScript-1c2333?style=flat-square&logo=javascript&logoColor=f7df1e" alt="JavaScript"> <img src="https://img.shields.io/badge/CSS3-1c2333?style=flat-square&logo=css3&logoColor=1572b6" alt="CSS3"> <img src="https://img.shields.io/badge/BigInt-1c2333?style=flat-square&logoColor=white" alt="BigInt">
 
 Fractions, roots and π stay exact – textbook-style display, works offline, zero dependencies.
@@ -51,7 +53,7 @@ Details: [docs/MATH.md](docs/MATH.md) · [docs/ARCHITECTURE.md](docs/ARCHITECTUR
 
 ## Use it
 
-**Online (GitHub Pages):** `https://<your-name>.github.io/exakto/` (see below for setup).
+**Online (GitHub Pages):** [https://morenobueno.github.io/exakto/](https://morenobueno.github.io/exakto/) – free, no sign-up, and it keeps working offline afterwards.
 
 **Locally:** open `exakto.html` (from the releases, or `npm run build:standalone` → `release/`) in a browser. It is a single self-contained file and works offline.
 
@@ -71,14 +73,14 @@ npm run build:standalone  # single file -> release/exakto.html
 npm run serve             # http://localhost:8080 (for PWA / service worker)
 ```
 
-### Enable GitHub Pages
+### Publish your own copy (fork)
 
-1. Create a public repository `exakto` on GitHub and push this folder (branch `main`).
+1. Fork the repository, or push this folder to your own public repository `exakto` (branch `main`).
 2. **Settings → Pages → Source: GitHub Actions**.
 3. `pages.yml` tests, builds and publishes on every push to `main`; `ci.yml` also checks pull requests without write permissions.
 4. For a download release push a tag such as `v1.1.0`; `release.yml` attaches `exakto.html`.
 
-The Pages address is typically `https://USER.github.io/exakto/`. All paths are relative, so the project works in a sub-path.
+Your copy will be served at `https://USER.github.io/exakto/`. All paths are relative, so the project works in a sub-path. GitHub Pages and Actions are free for public repositories.
 
 ## Roadmap
 

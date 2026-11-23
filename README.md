@@ -8,6 +8,8 @@
 
 Scientific · Offline · Open Source
 
+**[▶ Live-Demo ausprobieren](https://morenobueno.github.io/exakto/)**
+
 <img src="https://img.shields.io/badge/HTML5-1c2333?style=flat-square&logo=html5&logoColor=e34f26" alt="HTML5"> <img src="https://img.shields.io/badge/JavaScript-1c2333?style=flat-square&logo=javascript&logoColor=f7df1e" alt="JavaScript"> <img src="https://img.shields.io/badge/CSS3-1c2333?style=flat-square&logo=css3&logoColor=1572b6" alt="CSS3"> <img src="https://img.shields.io/badge/BigInt-1c2333?style=flat-square&logoColor=white" alt="BigInt">
 
 Brüche, Wurzeln und π bleiben exakt – als Schulbuch-Darstellung, offline nutzbar, ohne Abhängigkeiten.
@@ -51,7 +53,7 @@ Details: [docs/MATH.md](docs/MATH.md) · [docs/ARCHITECTURE.md](docs/ARCHITECTUR
 
 ## Benutzen
 
-**Online (GitHub Pages):** `https://<dein-name>.github.io/exakto/` (siehe unten, wie du das aktivierst).
+**Online (GitHub Pages):** [https://morenobueno.github.io/exakto/](https://morenobueno.github.io/exakto/) – kostenlos, ohne Anmeldung, funktioniert danach auch offline.
 
 **Lokal, ohne alles:** `exakto.html` (aus den Releases oder per `npm run build:standalone` in `release/`) im Browser öffnen. Es ist eine einzige, eigenständige Datei und läuft ohne Netz.
 
@@ -73,14 +75,14 @@ npm run serve             # http://localhost:8080 (für PWA / Service Worker)
 
 Aufbau und Datenfluss: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md). Beiträge: [CONTRIBUTING.md](CONTRIBUTING.md). Sicherheit: [SECURITY.md](SECURITY.md).
 
-### GitHub Pages aktivieren
+### Eigene Kopie veröffentlichen (Fork)
 
-1. Öffentliches Repository `exakto` auf GitHub anlegen und den Inhalt pushen (Branch `main`).
+1. Repository forken oder den Inhalt in ein eigenes öffentliches Repository `exakto` pushen (Branch `main`).
 2. **Settings → Pages → Source: GitHub Actions** wählen.
 3. `pages.yml` testet, baut und veröffentlicht bei jedem Push auf `main`; `ci.yml` prüft zusätzlich Pull Requests ohne Schreibrechte.
 4. Für einen Download-Release: Tag `v1.1.0` pushen, `release.yml` hängt `exakto.html` an.
 
-Die Pages-Adresse lautet typischerweise `https://BENUTZER.github.io/exakto/` (`BENUTZER` ersetzen). Alle Pfade sind relativ, das Projekt läuft im Unterpfad.
+Die Adresse deiner Kopie lautet `https://BENUTZER.github.io/exakto/` (`BENUTZER` ersetzen). Alle Pfade sind relativ, das Projekt läuft im Unterpfad. GitHub Pages und Actions sind für öffentliche Repositories kostenlos.
 
 ## Roadmap
 
