@@ -32,7 +32,7 @@ Viele Schul- und Studienrechner rechnen exakt (`2/3 + 1/4 = 11/12`, `√12 = 2�
 - **Graphen (`F2`):** bis zu drei Funktionen, Zoom, Verschieben, Trace; Polstellen (`1/x`, `tan x`) werden nicht verbunden.
 - **Engineering (`F3`):** Elektrotechnik mit SI-Präfixen (`4.7k`, `100n`, `47µ`) und Einheitenprüfung: Ohm, Spannungsteiler, Reihen-RLC mit Impedanz, Resonanz und Leistungen.
 - **Analysis & Statistik:** numerische Integration und Ableitung, Summen/Produkte, 1-Var/2-Var, Regressionen, Normal-, Binomial-, Poisson- und geometrische Verteilung.
-- **Löser:** Gleichungen (numerisch), Polynome Grad 2/3 (exakt, auch komplexe Lösungen), Gleichungssysteme 2×2/3×3, Wertetabelle.
+- **Löser:** Gleichungen (numerisch, Näherung mit ≈; unsichere Kandidaten als „unbestätigt“ markiert), Polynome Grad 2/3 (exakt, auch komplexe Lösungen), Gleichungssysteme 2×2/3×3, Wertetabelle.
 - **Komfort:** Verlauf, Variablen und Listen bleiben lokal gespeichert. Rechnung als **Link teilen**, Verlauf als **CSV exportieren**.
 - **Bedienung für alle:** hell/dunkel, drei Grössen, Deutsch/Englisch, vollständig per Tastatur bedienbar, beschriftete Tasten und angesagte Ergebnisse für Screenreader, Touch-Ziele ≥ 44 px, reduzierte Bewegung.
 - **Offline & installierbar (PWA)** – ohne Server, ohne Tracking, ohne Abhängigkeiten. Zusätzlich als **eine einzige HTML-Datei** (`exakto.html`).

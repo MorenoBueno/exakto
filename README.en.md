@@ -32,7 +32,7 @@ Many school and university calculators work exactly (`2/3 + 1/4 = 11/12`, `√12
 - **Graphs (`F2`):** up to three functions, zoom, pan, trace; poles (`1/x`, `tan x`) are not connected.
 - **Engineering (`F3`):** electrical tools with SI prefixes (`4.7k`, `100n`, `47µ`) and unit checking: Ohm, voltage divider, series RLC with impedance, resonance and power.
 - **Calculus & statistics:** numeric integration and derivative, sums/products, 1-var/2-var, regressions, normal, binomial, Poisson and geometric distributions.
-- **Solvers:** equations (numeric), polynomials of degree 2/3 (exact, incl. complex roots), 2×2/3×3 systems, value table.
+- **Solvers:** equations (numeric, shown with ≈; uncertain candidates marked “unconfirmed”), polynomials of degree 2/3 (exact, incl. complex roots), 2×2/3×3 systems, value table.
 - **Comfort:** history, variables and lists are kept locally. **Share a calculation as a link**, **export history as CSV**.
 - **For everyone:** light/dark, three sizes, German/English, fully keyboard-operable, labelled keys and announced results for screen readers, touch targets ≥ 44 px, reduced motion.
 - **Offline and installable (PWA)** – no server, no tracking, no dependencies. Also available as **one single HTML file** (`exakto.html`).
