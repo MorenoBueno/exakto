@@ -440,6 +440,15 @@ class Parser {
   }
 }
 
+/* Strukturpruefung: jede Struktur braucht genau die Teile ihrer Art (z. B. Bruch 2, Integral 4).
+   Aus dem Editor kommen immer vollstaendige Strukturen; Teilen-Links oder defekte Speicherstaende nicht. */
+function checkTree(nodes) {
+  for (const n of nodes) {
+    if (n.st === undefined) continue;
+    if (KIND_PARTS[n.st] !== n.parts.length) err('SYNTAX');
+    for (const p of n.parts) checkTree(p.nodes);
+  }
+}
 const MAX_TOKENS = 2000;
 function parseTokens(tokens) {
   if (tokens.length > MAX_TOKENS) err('TOO COMPLEX');
@@ -447,6 +456,7 @@ function parseTokens(tokens) {
   try {
     tree = buildTree(tokens);
     if (!tree.length) err('SYNTAX');
+    checkTree(tree);
     return new Parser(tree).parseAll();
   } catch (e) { if (e instanceof RangeError) err('TOO COMPLEX'); throw e; }
 }

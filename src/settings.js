@@ -35,7 +35,16 @@ function tokText(tokens) {
 /* ---------- Einstellungen ---------- */
 function saveUI() { try { localStorage.setItem(UIKEY, JSON.stringify(UI)); } catch (e) { /* egal */ } }
 function loadUI() {
-  try { const o = JSON.parse(localStorage.getItem(UIKEY) || 'null'); if (o) Object.assign(UI, o); } catch (e) { /* egal */ }
+  try {
+    const o = JSON.parse(localStorage.getItem(UIKEY) || 'null');
+    if (o && typeof o === 'object') {
+      /* nur bekannte Werte uebernehmen (defekter oder manipulierter Speicher) */
+      if (['auto', 'light', 'dark'].includes(o.theme)) UI.theme = o.theme;
+      if ([0.85, 1, 1.2].includes(Number(o.size))) UI.size = Number(o.size);
+      if (['de', 'en'].includes(o.lang)) UI.lang = o.lang;
+      if (typeof o.haptic === 'boolean') UI.haptic = o.haptic;
+    }
+  } catch (e) { /* egal */ }
   if (!localStorage.getItem(UIKEY)) {
     try { UI.lang = /^de/i.test(navigator.language || 'de') ? 'de' : 'en'; } catch (e) { /* egal */ }
   }
