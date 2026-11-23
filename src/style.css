@@ -190,5 +190,7 @@ html[data-theme="light"] .tout.err{background:#fdecec;border-color:#f0b4b4;color
   .keys{flex:none;margin-top:8px}
   .kc button{height:clamp(30px,5.4dvh,46px);margin-bottom:3px;border-radius:10px}
   .kc .s2{height:12px;line-height:12px;font-size:10px}
-  .hbtn{width:34px;height:34px}.dpad button{min-height:0}
+  .hbtn{width:34px;height:34px}
+  .dpad{padding:4px;gap:2px;border-radius:30px}
+  .dpad button{min-height:0;border-radius:14px;font-size:19px;line-height:1}
 }
