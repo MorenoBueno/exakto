@@ -365,7 +365,16 @@ function openNumSolver() {
     if (!v) err('SYNTAX');
     const f = x => { const loc = { [v]: F(x) }; return toNum(evalAst(L, loc)) - (R ? toNum(evalAst(R, loc)) : 0); };
     const roots = findRoots(f);
-    const lines = roots.length ? roots.map(r => `<span class="sl">${v} =</span> <span class="sv">${fmtAutoNum(r).html}</span>`) : [tr('Keine Lösung gefunden')];
+    /* Numerische Ergebnisse sind Naeherungen: immer als Dezimalwert mit ≈ (nie als scheinbar exakter Bruch).
+       Unbestaetigte Kandidaten (kein Vorzeichenwechsel nachweisbar) tragen ein ? und einen Hinweis. */
+    const line = r => { const a = fmtApprox(r.x).html; return r.confirmed
+      ? `<span class="sl">${v} ≈</span> <span class="sv">${a}</span>`
+      : `<span class="sl">${v} ≈</span> <span class="sv">${a}</span> <span class="un">? ${tr('unbestätigt')}</span>`; };
+    const lines = roots.map(line);
+    const anyUn = roots.some(r => !r.confirmed), anyOk = roots.some(r => r.confirmed);
+    if (!roots.length) lines.push(tr('Keine Lösung gefunden'));
+    else if (!anyOk) lines.unshift(`<span class="un">${tr('Keine bestätigte Lösung')}</span>`);
+    if (anyUn) lines.push(`<span class="un">${tr('? Berührung ohne Vorzeichenwechsel: mehrfache Nullstelle oder Minimum nahe 0')}</span>`);
     openList('NUM-SOLV', lines);
   });
   openForm({ title: 'NUM-SOLV   Gleichung', fields: [lhs, rhs, { type: 'btn', label: '[ SOLVE ]', action: submit }], onSubmit: submit });

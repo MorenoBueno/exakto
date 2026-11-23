@@ -19,8 +19,27 @@ eq('-2^2', ev(['-', '2', '{pow', '2', '}pow']), '−4');
 eq('(-2)^2', ev(['(', '-', '2', ')', '{pow', '2', '}pow']), '4');
 eq('2^3^2 rechtsassoziativ', ev(['2', '{pow', '3', '{pow', '2', '}pow', '}pow']), '512');
 near('Integral x^2 0..1', C.toNum(C.evalTokens(['{int', 'x', '{pow', '2', '}pow', '|int', 'x', '|int', '0', '|int', '1', '}int'])), 1 / 3, 1e-10);
-{ const r = C.findRoots(x => (x - 0.123) ** 2); eq('Doppelwurzel gefunden', r.length, 1); near('Doppelwurzel Lage', r[0], 0.123, 1e-8); }
+// Numerischer Loeser: bestaetigt nur bei nachweisbarem Vorzeichenwechsel; Beruehrpunkte nur "unbestaetigt"
+{ const r = C.findRoots(x => (x - 0.123) ** 2);
+  eq('Doppelwurzel: genau ein Kandidat', r.length, 1); near('Doppelwurzel Lage', r[0].x, 0.123, 1e-8);
+  eq('Doppelwurzel NICHT bestaetigt', r[0].confirmed, false); eq('Doppelwurzel Art', r[0].kind, 'touch'); }
+eq('positives Minimum (x-0.123)^2+1e-14: keine Nullstelle', C.findRoots(x => (x - 0.123) ** 2 + 1e-14).length, 0);
+eq('positives Minimum +1e-10: keine Nullstelle', C.findRoots(x => (x - 0.123) ** 2 + 1e-10).length, 0);
+eq('positives Minimum +1e-6: keine Nullstelle', C.findRoots(x => (x - 0.123) ** 2 + 1e-6).length, 0);
+eq('negatives Minimum: zwei bestaetigte Nullstellen', C.findRoots(x => (x - 0.123) ** 2 - 1e-14).filter(r => r.confirmed).length, 2);
 eq('Polstelle keine Nullstelle', C.findRoots(x => 1 / (x - 0.123)).length, 0);
+eq('Polstelle 1/(x-0.123)^2 keine Nullstelle', C.findRoots(x => 1 / (x - 0.123) ** 2).length, 0);
+eq('tan: nur Nullstellen, keine Polstellen bestaetigt', C.findRoots(x => Math.tan(x)).filter(r => Math.abs(r.x) < 3.5).map(r => Math.round(r.x / Math.PI * 1e6) / 1e6).join(','), '-1,0,1');
+eq('Sprung sign(x-0.5) ohne Wert 0: keine Nullstelle', C.findRoots(x => (x < 0.5 ? -1 : 1)).length, 0);
+{ const r = C.findRoots(x => x * x * x - 3 * x * x + 3 * x - 1); eq('Dreifachwurzel (x-1)^3 expandiert gefunden', r.length >= 1 && Math.abs(r[0].x - 1) < 1e-4, true); }
+{ const r = C.findRoots(x => x * x - 2 * x + 1); eq('x^2-2x+1 (Rauschen): nicht bestaetigt', r.length === 1 && !r[0].confirmed && Math.abs(r[0].x - 1) < 1e-6, true); }
+{ const r = C.findRoots(x => Math.sin(x) * Math.sin(x)); eq('sin^2 Beruehrpunkte unbestaetigt', r.every(q => !q.confirmed) && r.length > 0, true); }
+{ const r = C.findRoots(x => x * x - 4); eq('x^2-4 bestaetigt', r.length === 2 && r.every(q => q.confirmed), true); }
+{ const r = C.findRoots(x => Math.cos(x) - x); eq('cos(x)=x bestaetigt', r.length === 1 && r[0].confirmed, true); }
+{ const r = C.findRoots(x => x * (x - 1) * (x + 1)); eq('x^3-x: drei bestaetigte', r.length === 3 && r.every(q => q.confirmed), true); }
+{ const r = C.findRoots(x => Math.exp(x) + 1); eq('e^x+1: keine', r.length, 0); }
+{ const r = C.findRoots(x => 1e-9 * (x - 3)); eq('flache Gerade: bestaetigt', r.length === 1 && r[0].confirmed && Math.abs(r[0].x - 3) < 1e-8, true); }
+eq('fmtApprox Dezimal statt Bruch', C.fmtApprox(1 / 3).text, '0.3333333333'); eq('fmtApprox 0.5', C.fmtApprox(0.5).text, '0.5');
 { const q = C.solveQuadratic(C.int(1), C.F(1e8), C.int(1)); const [a, b] = q.roots.map(C.toNum);
   near('quad grosse Wurzel', a, -1e8, 0, 1e-12); near('quad kleine Wurzel', b, -1e-8, 0, 1e-12); }
 near('1e-20+1e-20', C.toNum(C.evalTokens(T('1E-20+1E-20'))), 2e-20, 0, 1e-12);

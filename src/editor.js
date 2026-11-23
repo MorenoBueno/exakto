@@ -323,41 +323,96 @@ function solveSystem(M) {
   }
   return M.map((r, i) => div(r[n], r[i]));
 }
-// numerisch: Nullstellen von f in [-lim,lim]
+/* Numerische Nullstellensuche mit Unsicherheitsbewertung.
+   Ein kleiner Funktionswert allein beweist keine Nullstelle. Jedes Ergebnis ist {x, confirmed, kind}:
+   - confirmed=true, kind 'crossing': f wechselt das Vorzeichen (Bisektion) UND |f| schrumpft zum Treffer hin
+     (Polstellen/Spruenge scheiden aus) UND beide Seiten liegen deutlich ueber dem Rundungsrauschen von f.
+   - confirmed=false, kind 'touch': f beruehrt 0, ohne dass ein Vorzeichenwechsel nachweisbar ist (z. B. doppelte
+     Nullstelle) oder der Wechsel nur im Rauschen liegt. Das kann auch ein Minimum knapp ueber 0 sein.
+   Minima, deren Wert klar ueber der Unsicherheit liegt (Rauschen von f, Lagegenauigkeit mal Kruemmung),
+   sind keine Nullstellen und werden nicht gemeldet. Bereich: rund ±3e8 (dicht um 0, dann gröber), bis zu 8 Treffer. */
+const FR_EPS = 2.220446049250313e-16;
+function frNoise(val, r) { // Streuung von f auf wenigen benachbarten Gleitkommazahlen = Rauschniveau
+  const h = FR_EPS * Math.max(Math.abs(r), 1); let lo = Infinity, hi = -Infinity;
+  for (let j = -6; j <= 6; j++) { const v = val(r + j * h); if (Number.isNaN(v)) continue; if (v < lo) lo = v; if (v > hi) hi = v; }
+  return hi >= lo ? hi - lo : 0;
+}
 function findRoots(f) {
-  const roots = []; const add1 = r => { if (!roots.some(q => Math.abs(q - r) < 1e-7 * Math.max(1, Math.abs(r)))) roots.push(r); };
+  const out = [];
+  const add1 = (x, confirmed, kind) => {
+    const sc = Math.max(1, Math.abs(x));
+    // Unbestaetigter Kandidat direkt neben einer bestaetigten Nullstelle: dieselbe Stelle, nicht doppelt melden
+    if (!confirmed && out.some(o => o.confirmed && Math.abs(o.x - x) < 1e-6 * sc)) return;
+    // gleiche Stelle (Rundungsabstand): zusammenfassen; eng benachbarte, getrennte Nullstellen bleiben getrennt
+    const q = out.find(o => Math.abs(o.x - x) < (confirmed === o.confirmed ? 1e-10 : 1e-6) * sc);
+    if (!q) out.push({ x, confirmed, kind });
+    else if (confirmed && !q.confirmed) { q.x = x; q.confirmed = true; q.kind = kind; }
+  };
   const pts = [];
   for (let k = 0; k <= 4000; k++) pts.push(-100 + k * 0.05);
   for (let e = 2; e <= 8; e++) { const lo = Math.pow(10, e); for (let k = 1; k <= 200; k++) { pts.push(lo * k / 100 + lo); pts.push(-(lo * k / 100 + lo)); } }
   pts.sort((a, b) => a - b);
   const val = x => { try { const y = f(x); return Number.isFinite(y) ? y : NaN; } catch (e) { return NaN; } };
   const ys = pts.map(val);
+  const sg = Math.sign;
+  /* Vorzeichenwechsel zwischen a und b (fa, fb ungleich 0, verschiedene Vorzeichen): Bisektion + Pruefungen */
+  const crossing = (a, fa, b, fb) => {
+    let lo = a, hi = b, flo = fa, fhi = fb;
+    for (let k = 0; k < 200; k++) {
+      const m = (lo + hi) / 2, fm = val(m);
+      if (Number.isNaN(fm)) return;                  // Definitionsluecke dazwischen: keine Nullstelle
+      if (fm === 0) { lo = hi = m; flo = fhi = 0; break; }
+      if (sg(fm) === sg(flo)) { lo = m; flo = fm; } else { hi = m; fhi = fm; }
+    }
+    // Polstelle/Sprung: |f| schrumpft zum Treffer hin nicht -> keine Nullstelle
+    if (Math.max(Math.abs(flo), Math.abs(fhi)) > 0.01 * Math.min(Math.abs(fa), Math.abs(fb))) return;
+    const r = (lo + hi) / 2;
+    // Beide Seiten muessen ueber dem Rauschen von f liegen, sonst ist der Wechsel nur "unbestaetigt".
+    // Abstand d von 1e-6 abwaerts probieren: dicht benachbarte Nullstellen sind erst bei kleinerem d trennbar,
+    // ein Vorzeichenwechsel nur im Rundungsrauschen besteht bei keinem d.
+    const sc = Math.max(1, Math.abs(r)), noise = frNoise(val, r);
+    let ok = false;
+    for (let e = 0; e <= 6 && !ok; e++) {
+      const d = 1e-6 * sc * Math.pow(10, -e);
+      const fl = val(r - d), fr = val(r + d), big = Math.max(Math.abs(fl), Math.abs(fr));
+      ok = !Number.isNaN(fl) && !Number.isNaN(fr) && sg(fl) === sg(fa) && sg(fr) === sg(fb) &&
+        Math.min(Math.abs(fl), Math.abs(fr)) > 8 * Math.max(noise, 4 * FR_EPS * big);
+    }
+    add1(r, ok, ok ? 'crossing' : 'touch');
+  };
   for (let i = 0; i < pts.length; i++) {
     const x = pts[i], y = ys[i];
     if (Number.isNaN(y)) continue;
-    if (y === 0) { add1(x); continue; }
-    const py = i > 0 ? ys[i - 1] : NaN;
-    // 1) Vorzeichenwechsel: Bisektion, danach Residuum- und Polstellenpruefung
-    if (!Number.isNaN(py) && py !== 0 && Math.sign(py) !== Math.sign(y)) {
-      let lo = pts[i - 1], hi = x, flo = py;
-      for (let k = 0; k < 200; k++) { const m = (lo + hi) / 2; const fm = val(m); if (Number.isNaN(fm)) break; if (fm === 0) { lo = hi = m; break; } if (Math.sign(fm) === Math.sign(flo)) { lo = m; flo = fm; } else hi = m; }
-      const r = (lo + hi) / 2, fr = val(r);
-      const mn = Math.min(Math.abs(py), Math.abs(y)), mx = Math.max(1, Math.abs(py), Math.abs(y));
-      // Polstelle: |f| waechst zur Mitte hin statt zu schrumpfen -> keine Nullstelle
-      if (!Number.isNaN(fr) && Math.abs(fr) <= mn && Math.abs(fr) < 1e-6 * mx) add1(r);
+    const py = i > 0 ? ys[i - 1] : NaN, ny = i + 1 < pts.length ? ys[i + 1] : NaN;
+    if (y === 0) { // exakter Nullwert: nur mit nachweisbarem Vorzeichenwechsel bestaetigt
+      const cross = !Number.isNaN(py) && !Number.isNaN(ny) && py !== 0 && ny !== 0 && sg(py) !== sg(ny);
+      add1(x, cross, cross ? 'crossing' : 'touch');
       continue;
     }
-    // 2) lokales Minimum von |f| ohne Vorzeichenwechsel: moegliche Nullstelle gerader Vielfachheit
-    const ny = i + 1 < pts.length ? ys[i + 1] : NaN;
-    if (!Number.isNaN(py) && !Number.isNaN(ny) && Math.abs(y) <= Math.abs(py) && Math.abs(y) < Math.abs(ny)) {
+    // 1) Vorzeichenwechsel zwischen zwei Stuetzstellen
+    if (!Number.isNaN(py) && py !== 0 && sg(py) !== sg(y)) { crossing(pts[i - 1], py, x, y); continue; }
+    // 2) lokales Minimum von |f| ohne Vorzeichenwechsel: Nullstelle gerader Vielfachheit, zwei dicht
+    //    benachbarte Nullstellen oder ein Minimum, das 0 verfehlt. Wir suchen das Minimum von sg(y)*f.
+    if (!Number.isNaN(py) && !Number.isNaN(ny) && sg(py) === sg(y) && sg(y) === sg(ny) &&
+        Math.abs(y) <= Math.abs(py) && Math.abs(y) < Math.abs(ny)) {
+      const s = sg(y), g = t => s * val(t);
       let lo = pts[i - 1], hi = pts[i + 1];
-      for (let k = 0; k < 200; k++) { // Goldener Schnitt auf |f|
+      for (let k = 0; k < 200; k++) { // Goldener Schnitt auf s*f
         const m1 = lo + (hi - lo) / 3, m2 = hi - (hi - lo) / 3;
-        if (Math.abs(val(m1)) < Math.abs(val(m2))) hi = m2; else lo = m1;
+        if (g(m1) < g(m2)) hi = m2; else lo = m1;
       }
-      const r = (lo + hi) / 2, fr = val(r), sc = Math.max(1, Math.abs(py), Math.abs(ny));
-      if (!Number.isNaN(fr) && Math.abs(fr) <= 1e-12 * sc) add1(r);
+      const r0 = (lo + hi) / 2, m0 = g(r0);
+      if (Number.isNaN(m0)) continue;
+      // Unsicherheit des Minimalwerts: Rauschen von f und Lagefehler (~sqrt(eps)*|r|) mal Kruemmung
+      const d = 1e-4 * Math.max(1, Math.abs(r0)), ga = g(r0 + d), gb = g(r0 - d);
+      const curv = Number.isNaN(ga) || Number.isNaN(gb) ? Infinity : Math.max(0, (ga + gb - 2 * m0) / (2 * d * d));
+      const u = Math.max(frNoise(val, r0), curv * FR_EPS * Math.max(1, Math.abs(r0)) ** 2);
+      if (m0 > 4 * u) continue;                                    // Minimum klar ueber 0: keine Nullstelle
+      if (m0 >= -4 * u) { add1(r0, false, 'touch'); continue; }    // von 0 nicht zu unterscheiden: unbestaetigt
+      crossing(pts[i - 1], py, r0, val(r0));                       // Minimum klar unter 0: f kreuzt 0 beidseits
+      crossing(r0, val(r0), pts[i + 1], ny);
     }
   }
-  return roots.sort((a, b) => Math.abs(a) - Math.abs(b) || a - b).slice(0, 8).sort((a, b) => a - b);
+  const rank = o => (o.confirmed ? 0 : 1);
+  return out.sort((a, b) => rank(a) - rank(b) || Math.abs(a.x) - Math.abs(b.x) || a.x - b.x).slice(0, 8).sort((a, b) => a.x - b.x);
 }

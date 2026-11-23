@@ -16,7 +16,7 @@ writeFileSync(join(dist, 'index.html'), html);
 
 // Kern (ohne Oberflaeche) fuer Node-Tests
 const exportsList = `S, CalcError, X, F, int, isRat, isInt, isZero, toNum, add, sub, mul, div, pow, neg, cmp, sqrtV,
-  fmtVal, fmtText, fmtFloat, fmtAutoNum, fmtCplx, floatHTML, fracHTML, radHTML, esc, MINUS, ratApprox,
+  fmtVal, fmtText, fmtFloat, fmtAutoNum, fmtApprox, fmtCplx, floatHTML, fracHTML, radHTML, esc, MINUS, ratApprox,
   buildTree, isOpen, isSep, isClose, isPlain, kindOf, isVarTok, VARS, KIND_PARTS, VERT, structInfo,
   Editor, evalTokens, compileTokens, evalAst, parseTokens, CONSTS, CONVS, FN, cdfNorm, invNormStd,
   calc1Var, calc2Var, REG_TYPES, solveQuadratic, solveCubic, solveSystem, findRoots, expandData, toBig, ev, withLocal,

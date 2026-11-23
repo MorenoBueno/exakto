@@ -18,7 +18,7 @@ const segs = f => C.sampleCurve(f, win.xmin, win.xmax, win.ymin, win.ymax, 401);
 { const f = fnOf(['{sqrt', 'x', '}sqrt']); ok('sqrt(-1) NaN', Number.isNaN(f(-1))); ok('sqrt(4)=2', f(4) === 2);
   const s = segs(f); ok('sqrt nur x>=0', s.every(g => g.every(p => p[0] >= 0))); }
 // y = sin(x), RAD: Nullstellen bei k*pi; Graph und Rechner nutzen denselben Winkelmodus
-{ C.S.angle = 'RAD'; const f = fnOf(['sin(', 'x', ')']); const r = C.findRoots(f).filter(x => Math.abs(x) < 10);
+{ C.S.angle = 'RAD'; const f = fnOf(['sin(', 'x', ')']); const r = C.findRoots(f).filter(r => r.confirmed && Math.abs(r.x) < 10).map(r => r.x);
   ok('sin RAD Nullstellen', r.length === 7 && r.every(x => Math.abs(x / Math.PI - Math.round(x / Math.PI)) < 1e-8));
   C.S.angle = 'DEG'; near('sin DEG(90)', fnOf(['sin(', 'x', ')'])(90), 1, 1e-12); C.S.angle = 'RAD'; near('sin RAD(pi/2)', f(Math.PI / 2), 1, 1e-12); C.S.angle = 'DEG'; }
 // Fenster und Gitter

@@ -287,6 +287,8 @@ function fmtVal(v, dec) {
 }
 // Text-Variante fuer Tabellen (Bruch mit Schraegstrich)
 function fmtText(v, dec) { return fmtVal(v, dec).text; }
+// Naeherungswert (immer dezimal, nie als Bruch) fuer numerische Loeser
+function fmtApprox(x) { const t = fmtFloat(x); return { html: floatHTML(t), text: t.replace(/^-/, MINUS) }; }
 // Dezimalzahl mit evtl. Bruch-Erkennung (fuer Loeser)
 function fmtAutoNum(x) {
   const fr = ratApprox(x, 1000, 1e-11);

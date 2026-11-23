@@ -90,8 +90,8 @@ eq('dms',ev(['1','.','5','▶DMS']),'1°30′0″');
   const s=C.solveSystem([[C.int(2),C.int(1),C.int(5)],[C.int(1),C.int(-1),C.int(1)]]); eq('sys2',s.map(v=>C.fmtText(v)).join(','),'2,1');
   const s3=C.solveSystem([[C.int(1),C.int(1),C.int(1),C.int(6)],[C.int(0),C.int(2),C.int(5),C.int(-4)],[C.int(2),C.int(5),C.int(-1),C.int(27)]]); eq('sys3',s3.map(v=>C.fmtText(v)).join(','),'5,3,-2'.replace(/-/g,'−'));
   const s4=C.solveSystem([[C.int(2),C.int(1),C.int(1)],[C.int(1),C.int(3),C.int(1)]]); eq('sys frac',s4.map(v=>C.fmtText(v)).join(','),'2/5,1/5');
-  const rt=C.findRoots(x=>x*x-4); eq('findRoots',rt.map(v=>+v.toFixed(8)).join(','),'-2,2');
-  const rt2=C.findRoots(x=>Math.cos(x)-x); eq('cos=x',+rt2[0].toFixed(8),0.73908513);
+  const rt=C.findRoots(x=>x*x-4); eq('findRoots',rt.map(v=>+v.x.toFixed(8)).join(','),'-2,2'); eq('findRoots bestaetigt',rt.every(v=>v.confirmed&&v.kind==='crossing'),true);
+  const rt2=C.findRoots(x=>Math.cos(x)-x); eq('cos=x',+rt2[0].x.toFixed(8),0.73908513);
 }
 // Editor
 { const e=new C.Editor(); 

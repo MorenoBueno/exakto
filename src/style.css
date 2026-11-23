@@ -46,7 +46,7 @@ body{min-height:100vh;display:flex;justify-content:center;align-items:center;pad
 .mrow{display:flex;flex-wrap:wrap;align-items:center;gap:2px 3px;padding:3px 2px;font-size:15px;border-bottom:1px dotted rgba(23,32,19,.25)}
 .mrow i{font-style:normal;width:5.2em;opacity:.65;font-size:12px}.mrow span{padding:0 5px;border-radius:3px;border:1.5px solid transparent}
 .mrow span.on{background:var(--lcd-ink);color:var(--lcd)}.mrow span.cc{border-color:var(--lcd-ink);outline:1px solid var(--lcd-ink);outline-offset:1px}.mrow.cur{background:rgba(23,32,19,.08)}
-.llist .ln{padding:2px 6px;font-size:19px}.sl{opacity:.75;margin-right:6px}.sv{font-weight:700}
+.llist .ln{padding:2px 6px;font-size:19px}.sl{opacity:.75;margin-right:6px}.sv{font-weight:700}.un{font-size:13px;opacity:.8;font-style:italic}
 .form{font-size:19px}.frow{display:flex;flex-wrap:wrap;align-items:center;gap:2px;padding:3px 0}
 .flab{font-size:14px;opacity:.75;margin-right:4px}.fsfx{margin:0 3px;font-size:17px}
 .fcell{display:inline-block;min-width:2.1em;min-height:1.35em;padding:0 5px;border:1.5px solid var(--lcd-ink);border-radius:4px}

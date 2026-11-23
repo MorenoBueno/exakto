@@ -12,7 +12,7 @@ const EN_TXT = {
   'Bruchanzeige: ': 'Fraction display: ', ' nicht enthalten': ' not included', ' geleert': ' cleared',
   'Syntaxfehler': 'Syntax error', 'Wert außerhalb des Definitionsbereichs': 'Value outside the domain', 'Division durch 0': 'Division by zero',
   'Zahl zu groß': 'Number too large', 'Ergebnis nicht reell': 'Result is not real', 'Keine/zu wenige Daten': 'No or too little data',
-  'Keine eindeutige Lösung': 'No unique solution', 'Ausdruck zu komplex': 'Expression too complex', 'Keine Lösung gefunden': 'No solution found', 'Regression: ': 'Regression: ',
+  'Keine eindeutige Lösung': 'No unique solution', 'Ausdruck zu komplex': 'Expression too complex', 'Keine Lösung gefunden': 'No solution found', 'Keine bestätigte Lösung': 'No confirmed solution', '? Berührung ohne Vorzeichenwechsel: mehrfache Nullstelle oder Minimum nahe 0': '? Touches zero without sign change: multiple root or minimum near 0', 'unbestätigt': 'unconfirmed', 'Regression: ': 'Regression: ',
   'clear: Liste leeren': 'clear: empty list', 'Zeile ': 'Row ', 'delete: Wert entfernen': 'delete: remove value',
   'b  binär': 'b  binary', 'o  oktal': 'o  octal', 'h  hexadezimal': 'h  hexadecimal', 'd  dezimal': 'd  decimal',
   'Numerischer Löser (Gleichung)': 'Numeric solver (equation)', 'Polynom (Grad 2/3)': 'Polynomial (degree 2/3)', 'Gleichungssystem (2/3)': 'System of equations (2/3)',
