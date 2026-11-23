@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="de" data-lang="de" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Exakto – exakter wissenschaftlicher Rechner</title>
+<meta name="description" content="Exakto: exakter wissenschaftlicher Taschenrechner im Browser. Brüche, Wurzeln und π bleiben exakt. Offline nutzbar. / Exact scientific calculator in your browser.">
+<meta name="theme-color" content="#102136">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="manifest" href="manifest.webmanifest">
+<meta property="og:title" content="Exakto">
+<meta property="og:description" content="Exakter wissenschaftlicher Rechner im Browser – Brüche, Wurzeln, π, Statistik, Löser. Offline nutzbar.">
+<meta property="og:type" content="website">
+<meta property="og:image" content="og.png">
+<style>
+/*CSS*/
+</style>
+</head>
+<body tabindex="0">
+<div class="wrap">
+  <div class="calc" id="calc">
+    <div class="brand"><div class="logo"><svg class="lg" width="22" height="22" viewBox="0 0 512 512" aria-hidden="true"><defs><linearGradient id="lgg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#5eead4"/><stop offset=".5" stop-color="#60a5fa"/><stop offset="1" stop-color="#a78bfa"/></linearGradient></defs><rect width="512" height="512" rx="116" fill="url(#lgg)"/><path fill="#102136" d="M152 120h250v58H214v50h160v56H214v50h188v58H152z"/></svg><b>Exakto</b></div>
+      <span class="tag"><span data-l="de">exakt · wissenschaftlich</span><span data-l="en">exact · scientific</span></span>
+      <div class="mwrap"><button type="button" id="menuBtn" class="hbtn" aria-haspopup="menu" aria-expanded="false" aria-controls="menuList" aria-label="Menü" title="Menü"><svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><g fill="currentColor"><rect x="0" y="0" width="6" height="6" rx="1.5"/><rect x="8" y="0" width="6" height="6" rx="1.5"/><rect x="0" y="8" width="6" height="6" rx="1.5"/><rect x="8" y="8" width="6" height="6" rx="1.5"/></g></svg></button>
+        <div id="menuList" class="mlist" role="menu" hidden>
+          <button type="button" role="menuitem" data-act="calc"><span data-l="de">Wissenschaftlich</span><span data-l="en">Scientific</span></button>
+          <button type="button" role="menuitem" data-act="graph"><span data-l="de">Gleichungen &amp; Graphen</span><span data-l="en">Equations &amp; graphs</span><kbd>F2</kbd></button>
+          <button type="button" role="menuitem" data-act="tools"><span data-l="de">Engineering · Elektrotechnik</span><span data-l="en">Engineering · Electrical</span><kbd>F3</kbd></button>
+          <button type="button" role="menuitem" data-act="help"><span data-l="de">Einstellungen &amp; Hilfe</span><span data-l="en">Settings &amp; help</span><kbd>?</kbd></button>
+        </div></div>
+      <button type="button" id="helpBtn" class="hbtn" aria-label="Hilfe und Einstellungen" title="Hilfe &amp; Einstellungen (? / F1)" aria-expanded="false">?</button></div>
+    <div class="screen">
+      <div class="ind"><div id="indL"></div><div id="indR"></div></div>
+      <div class="lcd" id="lcd"></div>
+      <div class="sr" id="live" aria-live="polite" aria-atomic="true"></div>
+      <div class="toast" id="toast"></div>
+    </div>
+    <div class="keys" id="keys"></div>
+  </div>
+</div>
+
+<div class="helpwrap" id="toolsPanel"><aside class="help tools" id="toolsAside" role="dialog" aria-label="Engineering"></aside></div>
+
+<div class="helpwrap" id="helpPanel"><aside class="help" role="dialog" aria-label="Hilfe und Einstellungen">
+  <button type="button" id="helpClose" class="hclose" aria-label="Close">×</button>
+
+  <h2><span data-l="de">Einstellungen</span><span data-l="en">Settings</span></h2>
+  <div class="set">
+    <div class="srow"><span class="sl2"><span data-l="de">Design</span><span data-l="en">Theme</span></span>
+      <span class="seg"><button type="button" data-set="theme:auto">Auto</button><button type="button" data-set="theme:light"><span data-l="de">Hell</span><span data-l="en">Light</span></button><button type="button" data-set="theme:dark"><span data-l="de">Dunkel</span><span data-l="en">Dark</span></button></span></div>
+    <div class="srow"><span class="sl2"><span data-l="de">Grösse</span><span data-l="en">Size</span></span>
+      <span class="seg"><button type="button" data-set="size:0.85">S</button><button type="button" data-set="size:1">M</button><button type="button" data-set="size:1.2">L</button></span></div>
+    <div class="srow"><span class="sl2"><span data-l="de">Sprache</span><span data-l="en">Language</span></span>
+      <span class="seg"><button type="button" data-set="lang:de">DE</button><button type="button" data-set="lang:en">EN</button></span></div>
+    <label class="srow chk"><span class="sl2"><span data-l="de">Vibration beim Tippen (Handy)</span><span data-l="en">Haptic feedback (phones)</span></span><input type="checkbox" id="hapticBox"></label>
+    <div class="srow acts">
+      <button type="button" id="shareBtn" class="abtn"><span data-l="de">Rechnung als Link kopieren</span><span data-l="en">Copy calculation as link</span></button>
+      <button type="button" id="exportBtn" class="abtn"><span data-l="de">Verlauf exportieren (CSV)</span><span data-l="en">Export history (CSV)</span></button>
+    </div>
+  </div>
+
+  <div data-l="de">
+    <h2>Bedienung</h2>
+    <p class="mut">Öffnen und schliessen mit <kbd>?</kbd> oder <kbd>F1</kbd>, schliessen auch mit <kbd>Esc</kbd>.</p>
+    <p>Die Eingabe erscheint wie im Schulbuch: Brüche, Wurzeln und Hochzahlen. Mit den Pfeiltasten navigierst du durch Brüche und Exponenten. Der Cursor muss mit <kbd>▶</kbd> aus dem Exponenten heraus.</p>
+    <h3>Tastatur &amp; Numpad</h3>
+    <table>
+      <tr><td><kbd>0</kbd>–<kbd>9</kbd> <kbd>.</kbd> <kbd>+</kbd> <kbd>−</kbd> <kbd>*</kbd> <kbd>/</kbd></td><td>Ziffern und Rechenzeichen (Numpad geht)</td></tr>
+      <tr><td><kbd>^</kbd></td><td>Hochzahl (x<sup>□</sup>)</td></tr>
+      <tr><td><kbd>(</kbd> <kbd>)</kbd> <kbd>,</kbd> <kbd>=</kbd> <kbd>!</kbd> <kbd>%</kbd></td><td>wie auf der Taste</td></tr>
+      <tr><td><kbd>Enter</kbd></td><td>enter</td></tr>
+      <tr><td><kbd>⌫</kbd> / <kbd>Entf</kbd></td><td>delete / vorwärts löschen</td></tr>
+      <tr><td><kbd>Esc</kbd></td><td>clear</td></tr>
+      <tr><td><kbd>←</kbd><kbd>→</kbd><kbd>↑</kbd><kbd>↓</kbd></td><td>Cursor, Bruch auf/ab, Verlauf</td></tr>
+      <tr><td><kbd>Tab</kbd></td><td>2nd</td></tr>
+      <tr><td><kbd>x</kbd><kbd>y</kbd><kbd>z</kbd><kbd>t</kbd> <kbd>a</kbd><kbd>b</kbd><kbd>c</kbd><kbd>d</kbd></td><td>Variablen</td></tr>
+      <tr><td><kbd>p</kbd> / <kbd>e</kbd> / <kbd>E</kbd></td><td>π / e / EE</td></tr>
+      <tr><td><kbd>S</kbd> <kbd>C</kbd> <kbd>T</kbd> <kbd>L</kbd> <kbd>G</kbd> <kbd>K</kbd></td><td>sin, cos, tan, ln·log, eˣ·10ˣ, !·nCr·nPr (Shift). Zweimal drücken wechselt zur Zweitfunktion.</td></tr>
+      <tr><td><kbd>F</kbd> <kbd>Q</kbd> <kbd>R</kbd> <kbd>X</kbd></td><td>Bruch, x², √, xⁿ (Shift)</td></tr>
+      <tr><td><kbd>A</kbd></td><td>Ans (Shift)</td></tr>
+      <tr><td><kbd>M</kbd> <kbd>O</kbd> <kbd>D</kbd> <kbd>N</kbd> <kbd>H</kbd></td><td>mode, math, data, stat/distr, table (Shift)</td></tr>
+      <tr><td><kbd>U</kbd> <kbd>B</kbd></td><td>convert, base n (Shift)</td></tr>
+    </table>
+    <h3>Tipps</h3>
+    <p><kbd>Strg</kbd>+<kbd>Z</kbd> / <kbd>Strg</kbd>+<kbd>Y</kbd> macht Eingaben rückgängig bzw. stellt sie wieder her. <kbd>F2</kbd> öffnet Graphen (◀▶ Trace, ▲▼ Funktion, <kbd>+</kbd>/<kbd>−</kbd> Zoom, <kbd>Shift</kbd>+Pfeile verschieben, <kbd>9</kbd> Fenster anpassen, <kbd>0</kbd> zurücksetzen). <kbd>F3</kbd> öffnet Elektrotechnik mit SI-Präfixen.</p>
+    <p>Mehrfach belegte Tasten wechseln bei wiederholtem Drücken: <b>ln→log</b>, <b>sin→sin⁻¹</b>, <b>!→nCr→nPr</b>, <b>eˣ→10ˣ</b>, <b>π→e</b>, <b>x→y→z→t→a→b→c→d</b>.</p>
+    <p>Ergebnis exakt oder dezimal: <b>◀▶≈</b>. Ein Operator als erste Eingabe rechnet mit dem letzten Ergebnis. <b>↑</b> holt frühere Eingaben zurück. Variablen, Listen, Verlauf und Einstellungen bleiben im Browser gespeichert.</p>
+    <p>Nicht enthalten: komplexe Zahlen, Matrizen, Vektoren sowie „op“ und „set op“.</p>
+    <p class="mut">Exakto ist ein unabhängiges Open-Source-Projekt und nicht mit Taschenrechner-Herstellern verbunden. Alle Markennamen gehören ihren Inhabern.</p>
+  </div>
+
+  <div data-l="en">
+    <h2>How to use</h2>
+    <p class="mut">Open and close with <kbd>?</kbd> or <kbd>F1</kbd>; <kbd>Esc</kbd> closes as well.</p>
+    <p>Input is shown in textbook style: fractions, roots and exponents. Use the arrow keys to move through fractions and exponents. Press <kbd>▶</kbd> to leave an exponent.</p>
+    <h3>Keyboard &amp; numpad</h3>
+    <table>
+      <tr><td><kbd>0</kbd>–<kbd>9</kbd> <kbd>.</kbd> <kbd>+</kbd> <kbd>−</kbd> <kbd>*</kbd> <kbd>/</kbd></td><td>Digits and operators (numpad works)</td></tr>
+      <tr><td><kbd>^</kbd></td><td>Exponent (x<sup>□</sup>)</td></tr>
+      <tr><td><kbd>(</kbd> <kbd>)</kbd> <kbd>,</kbd> <kbd>=</kbd> <kbd>!</kbd> <kbd>%</kbd></td><td>as on the key</td></tr>
+      <tr><td><kbd>Enter</kbd></td><td>enter</td></tr>
+      <tr><td><kbd>⌫</kbd> / <kbd>Del</kbd></td><td>delete / forward delete</td></tr>
+      <tr><td><kbd>Esc</kbd></td><td>clear</td></tr>
+      <tr><td><kbd>←</kbd><kbd>→</kbd><kbd>↑</kbd><kbd>↓</kbd></td><td>Cursor, fraction up/down, history</td></tr>
+      <tr><td><kbd>Tab</kbd></td><td>2nd</td></tr>
+      <tr><td><kbd>x</kbd><kbd>y</kbd><kbd>z</kbd><kbd>t</kbd> <kbd>a</kbd><kbd>b</kbd><kbd>c</kbd><kbd>d</kbd></td><td>Variables</td></tr>
+      <tr><td><kbd>p</kbd> / <kbd>e</kbd> / <kbd>E</kbd></td><td>π / e / EE</td></tr>
+      <tr><td><kbd>S</kbd> <kbd>C</kbd> <kbd>T</kbd> <kbd>L</kbd> <kbd>G</kbd> <kbd>K</kbd></td><td>sin, cos, tan, ln·log, eˣ·10ˣ, !·nCr·nPr (Shift). Press twice to switch to the second function.</td></tr>
+      <tr><td><kbd>F</kbd> <kbd>Q</kbd> <kbd>R</kbd> <kbd>X</kbd></td><td>fraction, x², √, xⁿ (Shift)</td></tr>
+      <tr><td><kbd>A</kbd></td><td>Ans (Shift)</td></tr>
+      <tr><td><kbd>M</kbd> <kbd>O</kbd> <kbd>D</kbd> <kbd>N</kbd> <kbd>H</kbd></td><td>mode, math, data, stat/distr, table (Shift)</td></tr>
+      <tr><td><kbd>U</kbd> <kbd>B</kbd></td><td>convert, base n (Shift)</td></tr>
+    </table>
+    <h3>Tips</h3>
+    <p><kbd>Ctrl</kbd>+<kbd>Z</kbd> / <kbd>Ctrl</kbd>+<kbd>Y</kbd> undo / redo. <kbd>F2</kbd> opens graphs (◀▶ trace, ▲▼ function, <kbd>+</kbd>/<kbd>−</kbd> zoom, <kbd>Shift</kbd>+arrows pan, <kbd>9</kbd> fit window, <kbd>0</kbd> reset). <kbd>F3</kbd> opens the electrical tools with SI prefixes.</p>
+    <p>Keys with several functions cycle when pressed repeatedly: <b>ln→log</b>, <b>sin→sin⁻¹</b>, <b>!→nCr→nPr</b>, <b>eˣ→10ˣ</b>, <b>π→e</b>, <b>x→y→z→t→a→b→c→d</b>.</p>
+    <p>Exact or decimal result: <b>◀▶≈</b>. An operator as first input uses the last result. <b>↑</b> recalls earlier entries. Variables, lists, history and settings are kept in your browser.</p>
+    <p>Not included: complex numbers, matrices, vectors, “op” and “set op”.</p>
+    <p class="mut">Exakto is an independent open-source project and is not affiliated with any calculator manufacturer. All trademarks belong to their owners.</p>
+  </div>
+</aside></div>
+
+<script>
+(function(){
+'use strict';
+/*JS*/
+})();
+</script>
+</body>
+</html>
