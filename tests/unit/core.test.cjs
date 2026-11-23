@@ -102,5 +102,15 @@ eq('dms',ev(['1','.','5','▶DMS']),'1°30′0″');
   const f=new C.Editor(); f.insStruct('pow',[['2']],-1); eq('x2 cursor after',f.c,3); f.bs(); eq('bs enters',f.c,2); f.bs(); f.bs(); eq('bs removes empty',f.t.length,0);
   const g=new C.Editor(); g.ins('5'); g.insStruct('pow',[[]],0); g.ins('2'); eq('pow vert down exits',g.vert('down'),true); eq('after exit',g.c,4);
 }
+// Regression: unvollstaendige/defekte Strukturen duerfen keinen rohen JS-Fehler werfen (Teilen-Link, defekter Speicher)
+{
+  const C2 = require('../../dist/core.cjs');
+  const codeOf = t => { try { C2.evalTokens(t); return 'OK'; } catch (e) { return e instanceof C2.CalcError ? e.code : 'RAW:' + e.message; } };
+  const cases = [
+    ['{root', '2', '}root'], ['{root', '2', '|root', '}root'], ['{frac', '1', '}frac'], ['{int', '1', '}int'],
+    ['{sqrt', '|sqrt', '2', '}sqrt'], ['{deriv', '1', '}deriv'], ['{abs'], ['{nope', '1', '}nope']
+  ];
+  for (const c of cases) { const r = codeOf(c); if (r === 'SYNTAX') pass++; else { fail++; console.log('FAIL malformed', JSON.stringify(c), r); } }
+}
 console.log(`pass=${pass} fail=${fail}`);
 if(fail) process.exit(1);
