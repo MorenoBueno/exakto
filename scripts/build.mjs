@@ -8,7 +8,7 @@ const src = f => readFileSync(join(root, 'src', f), 'utf8');
 const dist = join(root, 'dist');
 mkdirSync(dist, { recursive: true });
 
-const files = ['num.js', 'parse.js', 'editor.js', 'graphcore.js', 'eng.js', 'ui1.js', 'ui2.js', 'graph.js', 'tools.js', 'settings.js'];
+const files = ['num.js', 'parse.js', 'editor.js', 'graphcore.js', 'eng.js', 'linalg.js', 'ui1.js', 'ui2.js', 'ui3.js', 'graph.js', 'tools.js', 'settings.js'];
 const js = files.map(src).join('\n');
 const html = src('template.html').replace('/*CSS*/', () => src('style.css')).replace('/*JS*/', () => js);
 if (/\/\*(CSS|JS)\*\//.test(html)) throw new Error('Platzhalter nicht ersetzt');
@@ -20,8 +20,11 @@ const exportsList = `S, CalcError, X, F, int, isRat, isInt, isZero, toNum, add, 
   buildTree, isOpen, isSep, isClose, isPlain, kindOf, isVarTok, VARS, KIND_PARTS, VERT, structInfo,
   Editor, evalTokens, compileTokens, evalAst, parseTokens, CONSTS, CONVS, FN, cdfNorm, invNormStd,
   calc1Var, calc2Var, REG_TYPES, solveQuadratic, solveCubic, solveSystem, findRoots, expandData, toBig, ev, withLocal,
-  curveFn, niceStep, sampleCurve, fitY, ENG`;
-const core = `const CORE=(function(){'use strict';\n${['num.js', 'parse.js', 'editor.js', 'graphcore.js', 'eng.js'].map(src).join('\n')}\nreturn { ${exportsList} };\n})();\nmodule.exports = CORE;\n`;
+  curveFn, niceStep, sampleCurve, fitY, ENG,
+  czMk, czAdd, czSub, czMul, czDiv, czConj, czAbs, czArgUnit, czFromPolar, czPowInt, czPow, czSqrt, czExp, czLn, czFmt,
+  matAdd, matSub, matMul, matScale, matT, matDet, matInv, matRank, matRref, matTrace, matPow,
+  vecAdd, vecSub, vecDot, vecCross, vecNorm, vecUnit, vecAngle, vecProj, polar, rect, primeFactors, divisors, divRem, setOp, setOf`;
+const core = `const CORE=(function(){'use strict';\n${['num.js', 'parse.js', 'editor.js', 'graphcore.js', 'eng.js', 'linalg.js'].map(src).join('\n')}\nreturn { ${exportsList} };\n})();\nmodule.exports = CORE;\n`;
 writeFileSync(join(dist, 'core.cjs'), core);
 
 // statische Dateien (PWA, Icons)

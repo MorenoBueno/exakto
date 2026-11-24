@@ -135,7 +135,7 @@ function powInt(a, e) {
   }
   return result;
 }
-function sqrtX(n, d) { const [s, m] = sqrtExtract(n * d); return X(s, d, m, 0); }
+function sqrtX(n, d) { if (n === 0n) return X(0n); const [s, m] = sqrtExtract(n * d); return X(s, d, m, 0); }
 function powSigned(s, u) {
   if (babs(u) > 1000n) return null;
   let r = powInt(s, babs(u));

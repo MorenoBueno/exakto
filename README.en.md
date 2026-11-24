@@ -32,6 +32,7 @@ Many school and university calculators work exactly (`2/3 + 1/4 = 11/12`, `√12
 - **Graphs (`F2`):** up to three functions, zoom, pan, trace; poles (`1/x`, `tan x`) are not connected.
 - **Engineering (`F3`):** electrical tools with SI prefixes (`4.7k`, `100n`, `47µ`) and unit checking: Ohm, voltage divider, series RLC with impedance, resonance and power.
 - **Calculus & statistics:** numeric integration and derivative, sums/products, 1-var/2-var, regressions, normal, binomial, Poisson and geometric distributions.
+- **Second functions:** complex numbers (`2nd π`), matrices A–C up to 4×4 (`2nd math`), 2D/3D vectors (`2nd EE`), number operations `op` (Pol/Rec, prime factors, divisors, division with remainder) and set operations `set op` on L1–L3.
 - **Solvers:** equations (numeric, shown with ≈; uncertain candidates marked “unconfirmed”), polynomials of degree 2/3 (exact, incl. complex roots), 2×2/3×3 systems, value table.
 - **Comfort:** history, variables and lists are kept locally. **Share a calculation as a link**, **export history as CSV**.
 - **For everyone:** light/dark, three sizes, German/English, fully keyboard-operable, labelled keys and announced results for screen readers, touch targets ≥ 44 px, reduced motion.
@@ -43,7 +44,7 @@ Many school and university calculators work exactly (`2/3 + 1/4 = 11/12`, `√12
 
 ## Known limits
 
-- No complex numbers, matrices or vectors in the main calculator; `op`/`set op` are missing.
+- Complex numbers, matrices and vectors run in their own menus (they cannot be typed directly into the main expression).
 - Decimal input (`0.1`) is an approximation; integer and fraction input stays exact. Not a full computer algebra system.
 - Numeric root finding, integral and derivative are approximations. No finite grid is guaranteed to find all roots.
 - Units exist only in the engineering panel (checked per field), not in the main calculator.
@@ -87,7 +88,7 @@ Your copy will be served at `https://USER.github.io/exakto/`. All paths are rela
 - [x] Calculation core with acceptance tests, limits on expression length
 - [x] Responsive UI, keyboard, README, MIT, Pages demo, HTML download
 - [x] PWA, versioned cache, local data
-- [ ] Complex numbers, matrices/vectors, graph analysis (roots, intersections), more engineering modules
+- [ ] Graph analysis (roots, intersections), more engineering modules
 - [ ] Web worker for abortable long calculations, warning when integrals do not converge
 - [ ] End-to-end browser tests in CI, tests on real phones and screen readers
 

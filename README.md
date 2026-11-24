@@ -32,6 +32,7 @@ Viele Schul- und Studienrechner rechnen exakt (`2/3 + 1/4 = 11/12`, `√12 = 2�
 - **Graphen (`F2`):** bis zu drei Funktionen, Zoom, Verschieben, Trace; Polstellen (`1/x`, `tan x`) werden nicht verbunden.
 - **Engineering (`F3`):** Elektrotechnik mit SI-Präfixen (`4.7k`, `100n`, `47µ`) und Einheitenprüfung: Ohm, Spannungsteiler, Reihen-RLC mit Impedanz, Resonanz und Leistungen.
 - **Analysis & Statistik:** numerische Integration und Ableitung, Summen/Produkte, 1-Var/2-Var, Regressionen, Normal-, Binomial-, Poisson- und geometrische Verteilung.
+- **Zweitfunktionen:** komplexe Zahlen (`2nd π`), Matrizen A–C bis 4×4 (`2nd math`), Vektoren 2D/3D (`2nd EE`), Zahlen-Operationen `op` (Pol/Rec, Primfaktoren, Teiler, Division mit Rest) und Mengenoperationen `set op` auf L1–L3.
 - **Löser:** Gleichungen (numerisch, Näherung mit ≈; unsichere Kandidaten als „unbestätigt“ markiert), Polynome Grad 2/3 (exakt, auch komplexe Lösungen), Gleichungssysteme 2×2/3×3, Wertetabelle.
 - **Komfort:** Verlauf, Variablen und Listen bleiben lokal gespeichert. Rechnung als **Link teilen**, Verlauf als **CSV exportieren**.
 - **Bedienung für alle:** hell/dunkel, drei Grössen, Deutsch/Englisch, vollständig per Tastatur bedienbar, beschriftete Tasten und angesagte Ergebnisse für Screenreader, Touch-Ziele ≥ 44 px, reduzierte Bewegung.
@@ -43,7 +44,7 @@ Viele Schul- und Studienrechner rechnen exakt (`2/3 + 1/4 = 11/12`, `√12 = 2�
 
 ## Bekannte Grenzen
 
-- Keine komplexen Zahlen, Matrizen und Vektoren im Hauptrechner; `op`/`set op` fehlen.
+- Komplexe Zahlen, Matrizen und Vektoren laufen in eigenen Menüs (nicht direkt im Ausdruck des Hauptrechners eintippbar).
 - Dezimaleingaben (`0.1`) sind Näherungen; ganzzahlige und Bruch-Eingaben bleiben exakt. Kein vollständiges Computeralgebrasystem.
 - Numerische Nullstellensuche, Integral und Ableitung sind Näherungen. Kein endliches Raster findet garantiert alle Nullstellen.
 - Einheiten gibt es nur im Engineering-Panel (Prüfung je Feld), nicht im Hauptrechner.
@@ -89,7 +90,7 @@ Die Adresse deiner Kopie lautet `https://BENUTZER.github.io/exakto/` (`BENUTZER`
 - [x] **A · Fundament:** Rechenkern mit Tests aus der Projektvision, Grenzen für Ausdruckslänge
 - [x] **B · Öffentliche Alpha:** responsives UI, Tastatur, README, MIT, Pages-Demo, HTML-Download
 - [x] **C · Offline:** PWA, versionierter Cache, lokale Daten
-- [ ] **D · Fachmodule:** Komplexe Zahlen, Matrizen/Vektoren, Graph-Analyse (Nullstellen, Schnittpunkte), weitere Engineering-Module
+- [ ] **D · Fachmodule:** Graph-Analyse (Nullstellen, Schnittpunkte), weitere Engineering-Module
 - [ ] Web Worker für abbrechbare lange Berechnungen, Warnung bei fehlender Integral-Konvergenz
 - [ ] Browser-Tests (End-to-End) in der CI, Test auf echten Mobilgeräten und mit Screenreadern
 - [ ] **E · Version 1.0** nach Abschluss der Fachmodule

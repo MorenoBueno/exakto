@@ -2,7 +2,7 @@
 const ERR_DE = {
   'SYNTAX': 'Syntaxfehler', 'DOMAIN': 'Wert außerhalb des Definitionsbereichs', 'DIVIDE BY 0': 'Division durch 0',
   'OVERFLOW': 'Zahl zu groß', 'NONREAL ANSWER': 'Ergebnis nicht reell', 'STAT': 'Keine/zu wenige Daten',
-  'NO UNIQUE SOLUTION': 'Keine eindeutige Lösung', 'TOO COMPLEX': 'Ausdruck zu komplex',
+  'NO UNIQUE SOLUTION': 'Keine eindeutige Lösung', 'TOO COMPLEX': 'Ausdruck zu komplex', 'DIMENSION': 'Falsche Größe von Matrix/Vektor', 'SINGULAR MAT': 'Matrix nicht invertierbar',
 };
 function openErr(code, onGoto) {
   const sc = {
@@ -467,6 +467,11 @@ function openByName(name) {
     case 'random': openMenu(randomMenu()); break;
     case 'angle': openMenu(angleMenu()); break;
     case 'rp': openMenu(rpMenu()); break;
+    case 'complex': openMenu(complexMenu()); break;
+    case 'matrix': openMenu(matrixMenu()); break;
+    case 'vector': openVector(); break;
+    case 'opmenu': openMenu(opMenu()); break;
+    case 'setop': openSetOp(); break;
     case 'base': openMenu(baseMenu()); break;
     case 'numsolve': openNumSolver(); break;
     case 'polysolve': openPolySolver(); break;
