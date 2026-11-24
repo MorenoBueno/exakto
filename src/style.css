@@ -188,9 +188,11 @@ html[data-theme="light"] .tout.err{background:#fdecec;border-color:#f0b4b4;color
   .screen{flex:1 1 auto;min-height:90px;display:flex;flex-direction:column}
   .screen .lcd{flex:1 1 auto;height:auto;min-height:0}
   .keys{flex:none;margin-top:8px}
-  .kc button{height:clamp(30px,5.4dvh,46px);margin-bottom:3px;border-radius:10px}
+  .kc button{height:clamp(28px,5dvh,46px);margin-bottom:3px;border-radius:10px}
   .kc .s2{height:12px;line-height:12px;font-size:10px}
   .hbtn{width:34px;height:34px}
   .dpad{padding:4px;gap:2px;border-radius:30px}
   .dpad button{min-height:0;border-radius:14px;font-size:19px;line-height:1}
 }
+.lcd.gr{touch-action:none;overflow:hidden}
+[data-tap]{cursor:pointer}

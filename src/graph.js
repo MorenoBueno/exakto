@@ -1,5 +1,8 @@
 /* ===== graph.js : Graphenmodus (y = f(x), bis zu 3 Funktionen) ===== */
-const GW = 394, GH = 258, GPAD_L = 4, GPAD_B = 32;
+let GW = 394, GH = 258;
+const GPAD_L = 4; let GPAD_B = 32;
+// Zeichenflaeche = tatsaechliche Groesse des Displays (Handy, Fenster, Querformat)
+function graphSize() { const w = lcd.clientWidth - 14, h = lcd.clientHeight - 11; if (w > 120 && h > 40) { GW = Math.round(w); GH = Math.round(h); } GPAD_B = GH < 130 ? 29 : 32; }
 const GDASH = ['', '6 3', '1.5 3.5'];
 function openGraphForm() {
   const fs = [exprField('y1=', null), exprField('y2=', null), exprField('y3=', null)];
@@ -16,13 +19,15 @@ function openGraphForm() {
   openForm({ title: 'GRAPH', fields: [...fs, { type: 'btn', label: tr('[ Graph zeichnen ]'), action: submit }], onSubmit: submit });
 }
 function openGraph(items) {
-  const asp = GH / GW;
-  const win = ST.graphWin || { xmin: -10, xmax: 10, ymin: -10 * asp, ymax: 10 * asp };
+  graphSize();
+  const win = ST.graphWin || { xmin: -10, xmax: 10, ymin: -10 * GH / GW, ymax: 10 * GH / GW, asp: GH / GW };
   const sc = {
     type: 'graph', items, win, ti: 0, tx: 0, editor() { return null; },
     X(x) { return GPAD_L + (x - win.xmin) / (win.xmax - win.xmin) * (GW - GPAD_L - 2); },
     Y(y) { return 4 + (win.ymax - y) / (win.ymax - win.ymin) * (GH - GPAD_B - 6); },
     render() {
+      graphSize();
+      { const na = GH / GW; if (win.asp && Math.abs(win.asp - na) > 1e-4) { const cy = (win.ymin + win.ymax) / 2, hy = (win.ymax - win.ymin) / 2 * na / win.asp; win.ymin = cy - hy; win.ymax = cy + hy; } win.asp = na; }
       const f2 = n => (Math.abs(n) < 1e-12 ? '0' : String(Number(n.toPrecision(6)))).replace('-', '−');
       let g = '';
       const sx = niceStep(win.xmax - win.xmin, 8), sy = niceStep(win.ymax - win.ymin, 6);
@@ -55,12 +60,12 @@ function openGraph(items) {
       } else info = `${it.n}: x = ${f2(sc.tx)}   y nicht definiert`;
       g += `<rect x="0" y="${GH - 16}" width="${GW}" height="16" class="gb"/><text x="6" y="${GH - 5}" class="gl">${esc(info)}</text><text x="${GW - 4}" y="${GH - 5}" class="gl" text-anchor="end">${S.angle}</text>`;
       g += `<text x="${GW - 4}" y="12" class="gt" text-anchor="end">${items.map(i => esc(i.n + '=' + i.txt)).join('   ').slice(0, 60)}</text>`;
-      return `<svg class="graph" viewBox="0 0 ${GW} ${GH}" width="100%" role="img" aria-label="Graph: ${esc(items.map(i => i.n + '=' + i.txt).join(', '))}. ${esc(info)}">${g}</svg>`;
+      return `<svg class="graph" viewBox="0 0 ${GW} ${GH}" width="${GW}" height="${GH}" role="img" aria-label="Graph: ${esc(items.map(i => i.n + '=' + i.txt).join(', '))}. ${esc(info)}">${g}</svg>`;
     },
     zoom(k) { const cx = (win.xmin + win.xmax) / 2, cy = (win.ymin + win.ymax) / 2, hx = (win.xmax - win.xmin) / 2 * k, hy = (win.ymax - win.ymin) / 2 * k; win.xmin = cx - hx; win.xmax = cx + hx; win.ymin = cy - hy; win.ymax = cy + hy; },
     pan(dx, dy) { const w = win.xmax - win.xmin, h = win.ymax - win.ymin; win.xmin += dx * w; win.xmax += dx * w; win.ymin += dy * h; win.ymax += dy * h; },
     stepTrace(d) { const stp = (win.xmax - win.xmin) / 80; sc.tx += d * stp; if (sc.tx > win.xmax || sc.tx < win.xmin) sc.pan(d * 0.5, 0); },
-    reset() { win.xmin = -10; win.xmax = 10; win.ymin = -10 * asp; win.ymax = 10 * asp; sc.tx = 0; },
+    reset() { win.xmin = -10; win.xmax = 10; win.ymin = -10 * GH / GW; win.ymax = 10 * GH / GW; sc.tx = 0; },
     fit() { const r = fitY(items.map(i => i.fn), win.xmin, win.xmax); if (r) { win.ymin = r[0]; win.ymax = r[1]; } },
     cmd(c) {
       ST.graphWin = win;
@@ -86,20 +91,31 @@ function openGraph(items) {
 let graphMouseOn = false;
 function initGraphMouse() {
   if (graphMouseOn) return; graphMouseOn = true;
-  let drag = null;
+  let drag = null, pinch = null; const pts = new Map();
   const g = () => { const s = cur(); return s.type === 'graph' ? s : null; };
+  const dist = () => { const [a, b] = [...pts.values()]; return Math.hypot(a.x - b.x, a.y - b.y); };
   lcd.addEventListener('wheel', e => { const s = g(); if (!s) return; e.preventDefault(); s.zoom(e.deltaY < 0 ? 0.8 : 1.25); renderAll(); }, { passive: false });
-  lcd.addEventListener('pointerdown', e => { const s = g(); if (!s) return; drag = { x: e.clientX, y: e.clientY, moved: false }; try { lcd.setPointerCapture(e.pointerId); } catch (x) { /* egal */ } });
+  lcd.addEventListener('pointerdown', e => {
+    const s = g(); if (!s) return; pts.set(e.pointerId, { x: e.clientX, y: e.clientY });
+    if (pts.size === 2) { pinch = { d: dist() }; drag = null; return; }
+    drag = { x: e.clientX, y: e.clientY, moved: false }; try { lcd.setPointerCapture(e.pointerId); } catch (x) { /* egal */ }
+  });
   lcd.addEventListener('pointermove', e => {
-    const s = g(); if (!s || !drag) return;
+    const s = g(); if (!s) return; if (pts.has(e.pointerId)) pts.set(e.pointerId, { x: e.clientX, y: e.clientY });
+    if (pinch && pts.size === 2) { const d = dist(); if (d > 8 && pinch.d > 8 && Math.abs(d - pinch.d) > 2) { s.zoom(pinch.d / d); pinch.d = d; renderAll(); } return; }
+    if (!drag) return;
     const r = lcd.getBoundingClientRect(), dx = (e.clientX - drag.x) / r.width, dy = (e.clientY - drag.y) / r.height;
     if (Math.abs(dx) + Math.abs(dy) > 0.004) { drag.moved = true; s.pan(-dx, dy); drag.x = e.clientX; drag.y = e.clientY; renderAll(); }
   });
-  lcd.addEventListener('pointerup', e => {
-    const s = g(); const d = drag; drag = null; if (!s || !d || d.moved) return;
-    const r = lcd.getBoundingClientRect(); const px = (e.clientX - r.left) / r.width * GW; // Tippen = Trace dorthin
+  const up = e => {
+    pts.delete(e.pointerId); if (pinch) { if (pts.size < 2) pinch = null; drag = null; return; }
+    const s = g(); const d = drag; drag = null; if (!s || !d || d.moved || e.type === 'pointercancel') return;
+    const r = lcd.getBoundingClientRect(); const px = (e.clientX - r.left - 7) / (r.width - 14) * GW; // Tippen = Trace dorthin
     s.tx = s.win.xmin + (px - GPAD_L) / (GW - GPAD_L - 2) * (s.win.xmax - s.win.xmin); renderAll();
-  });
+  };
+  lcd.addEventListener('pointerup', up); lcd.addEventListener('pointercancel', up);
+  const rs = () => { if (!ST.off && cur().type === 'graph') renderAll(); };
+  window.addEventListener('resize', rs); window.addEventListener('orientationchange', rs);
 }
 /* Shift+Pfeil verschiebt, +/- zoomt (Tastatur) */
 function graphKey(e) {

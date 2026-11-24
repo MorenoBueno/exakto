@@ -9,11 +9,12 @@ function openErr(code, onGoto) {
     type: 'err', overlay: true, sel: 0, editor() { return null; },
     render() {
       return `<div class="errt">ERROR: ${esc(code)}</div><div class="errd">${esc(tr(ERR_DE[code] || ''))}</div>` +
-        `<div class="mi ${sc.sel === 0 ? 'sel' : ''}"><b>1</b> Quit</div><div class="mi ${sc.sel === 1 ? 'sel' : ''}"><b>2</b> Goto</div>`;
+        `<div class="mi ${sc.sel === 0 ? 'sel' : ''}" data-tap="1"><b>1</b> Quit</div><div class="mi ${sc.sel === 1 ? 'sel' : ''}" data-tap="2"><b>2</b> Goto</div>`;
     },
     cmd(c) {
       const quit = () => { pop(); if (cur().type === 'home') ST.ed.clear(); };
       const go = () => { pop(); if (onGoto) onGoto(); };
+      if (c.k === 'tap') { c.key === '1' ? quit() : go(); return true; }
       if (c.k === 'nav') { if (c.d === 'up' || c.d === 'down') sc.sel = 1 - sc.sel; return true; }
       if (c.k === 'enter') { sc.sel === 0 ? quit() : go(); return true; }
       if (c.k === 'tok' && c.t[0] === '1') { quit(); return true; }
@@ -31,6 +32,7 @@ function guard(fn, onGoto) { try { fn(); } catch (e) { if (e instanceof CalcErro
 HOME.editor = () => { ST.hsel = null; return ST.ed; };
 HOME.cmd = function (c) {
   switch (c.k) {
+    case 'tap': { const h = ST.hist[+c.key.slice(2)]; ST.hsel = null; if (h) ST.ed.insMany(h.t); return true; }
     case 'enter': return homeEnter();
     case 'clear':
       if (ST.hsel !== null) ST.hsel = null; else if (!ST.ed.isEmpty()) ST.ed.clear(); else { ST.hist = []; save(); }
@@ -74,7 +76,7 @@ function resHTML(h) {
 HOME.render = function () {
   let h = '<div class="hist">';
   ST.hist.forEach((e, i) => {
-    h += `<div class="ent ${ST.hsel === i ? 'sel' : ''}"><div class="ex">${rStatic(e.t)}</div><div class="rs">${resHTML(e)}</div></div>`;
+    h += `<div class="ent ${ST.hsel === i ? 'sel' : ''}" data-tap="h:${i}"><div class="ex">${rStatic(e.t)}</div><div class="rs">${resHTML(e)}</div></div>`;
   });
   h += `<div class="ent cur"><div class="ex">${rEd(ST.ed, ST.hsel === null)}</div></div></div>`;
   return h;
@@ -94,10 +96,11 @@ function openMode() {
     render() {
       return '<div class="mtabs"><span class="on">MODE</span></div>' + rows.map((r, i) =>
         `<div class="mrow ${i === sc.row ? 'cur' : ''}"><i>${r.name}</i>` +
-        r.opts.map((o, j) => `<span class="${r.get() === o ? 'on' : ''} ${i === sc.row && j === sc.col ? 'cc' : ''}">${o}</span>`).join('') + '</div>').join('');
+        r.opts.map((o, j) => `<span class="${r.get() === o ? 'on' : ''} ${i === sc.row && j === sc.col ? 'cc' : ''}" data-tap="m:${i}:${j}">${o}</span>`).join('') + '</div>').join('');
     },
     cmd(c) {
       const r = rows[sc.row];
+      if (c.k === 'tap') { const [, i, j] = c.key.split(':').map(Number); sc.row = i; sc.col = j; rows[i].set(rows[i].opts[j]); save(); return true; }
       if (c.k === 'nav') {
         if (c.d === 'up' || c.d === 'down') { sc.row = (sc.row + (c.d === 'down' ? 1 : rows.length - 1)) % rows.length; sc.col = Math.max(0, r2().opts.indexOf(r2().get())); }
         else sc.col = Math.max(0, Math.min(r.opts.length - 1, sc.col + (c.d === 'right' ? 1 : -1)));
@@ -120,9 +123,10 @@ function openList(title, lines, onClose) {
   const sc = {
     type: 'list', off: 0, editor() { return null; },
     render() {
-      return `<div class="mtabs"><span class="on">${esc(title)}</span></div><div class="llist">` + lines.map((l, i) => `<div class="ln ${i === sc.off ? 'sel' : ''}">${l}</div>`).join('') + '</div>';
+      return `<div class="mtabs"><span class="on">${esc(title)}</span></div><div class="llist">` + lines.map((l, i) => `<div class="ln ${i === sc.off ? 'sel' : ''}" data-tap="l:${i}">${l}</div>`).join('') + '</div>';
     },
     cmd(c) {
+      if (c.k === 'tap') { sc.off = +c.key.slice(2); return true; }
       if (c.k === 'nav') { if (c.d === 'up') sc.off = Math.max(0, sc.off - 1); else if (c.d === 'down') sc.off = Math.min(lines.length - 1, sc.off + 1); return true; }
       if (c.k === 'clear' || c.k === 'enter') { pop(); if (onClose) onClose(); return true; }
       if (c.k === 'quit') { goHome(); return true; }
@@ -144,9 +148,9 @@ function openForm(def) {
       let line = '', lastGrp = null;
       fs.forEach((f, i) => {
         const on = i === sc.sel; let cell;
-        if (f.type === 'expr') cell = `<span class="fcell ${on ? 'sel' : ''}">${rEd(f.ed, on)}</span>`;
-        else if (f.type === 'choice') cell = f.opts.length > 4 ? `<span class="fopt on ${on ? 'sel' : ''}">◀ ${esc(f.opts[f.idx])} ▶</span>` : f.opts.map((o, j) => `<span class="fopt ${j === f.idx ? 'on' : ''} ${on && j === f.idx ? 'sel' : ''}">${esc(o)}</span>`).join('');
-        else cell = `<span class="fbtn ${on ? 'sel' : ''}">${esc(f.label)}</span>`;
+        if (f.type === 'expr') cell = `<span class="fcell ${on ? 'sel' : ''}" data-tap="f:${i}">${rEd(f.ed, on)}</span>`;
+        else if (f.type === 'choice') cell = f.opts.length > 4 ? `<span class="fopt on ${on ? 'sel' : ''}" data-tap="c:${i}">◀ ${esc(f.opts[f.idx])} ▶</span>` : f.opts.map((o, j) => `<span class="fopt ${j === f.idx ? 'on' : ''} ${on && j === f.idx ? 'sel' : ''}" data-tap="o:${i}:${j}">${esc(o)}</span>`).join('');
+        else cell = `<span class="fbtn ${on ? 'sel' : ''}" data-tap="f:${i}">${esc(f.label)}</span>`;
         const lab = f.type === 'btn' ? '' : (f.label ? `<span class="flab">${esc(f.label)}</span>` : '');
         const sfx = f.sfx ? `<span class="fsfx">${typeof f.sfx === 'function' ? esc(f.sfx()) : esc(f.sfx)}</span>` : '';
         const piece = lab + cell + sfx;
@@ -162,6 +166,14 @@ function openForm(def) {
       const f = fs[sc.sel]; const E = f && f.type === 'expr' ? f.ed : null;
       const move = d => { sc.sel = Math.max(0, Math.min(fs.length - 1, sc.sel + d)); };
       switch (c.k) {
+        case 'tap': {
+          const [kind, a, b] = c.key.split(':'); const i = +a, g = fs[i]; if (!g) return true;
+          sc.sel = i;
+          if (kind === 'o') { g.idx = +b; if (g.onChange) g.onChange(); }
+          else if (kind === 'c') { g.idx = (g.idx + 1) % g.opts.length; if (g.onChange) g.onChange(); }
+          else if (g.type === 'btn') g.action(sc);
+          return true;
+        }
         case 'nav':
           if (E && edCmd(E, c, {})) {
             if ((c.d === 'left' || c.d === 'right') && f.grp !== undefined) {
@@ -271,18 +283,19 @@ function openData() {
     if (sc.row < sc.top) sc.top = sc.row;
     if (sc.row >= sc.top + 6) sc.top = sc.row - 5;
     let h = '<div class="mtabs"><span class="on">DATA</span></div><table class="tbl dat"><tr>' +
-      LNAMES.map((n, i) => `<th class="${sc.hdr && sc.col === i ? 'sel' : ''}">${n}</th>`).join('') + '</tr>';
+      LNAMES.map((n, i) => `<th class="${sc.hdr && sc.col === i ? 'sel' : ''}" data-tap="h:${i}">${n}</th>`).join('') + '</tr>';
     for (let r = sc.top; r < sc.top + 6; r++) {
       h += '<tr>' + LNAMES.map((n, i) => {
         const v = S.lists[n][r]; const on = !sc.hdr && sc.row === r && sc.col === i;
         const txt = on && sc.edit ? rEd(sc.edit, true) : (v === null || v === undefined ? '' : floatHTML(fmtFloat(v)));
-        return `<td class="${on ? 'sel' : ''}">${txt}</td>`;
+        return `<td class="${on ? 'sel' : ''}" data-tap="d:${r}:${i}">${txt}</td>`;
       }).join('') + '</tr>';
     }
     return h + '</table>' + `<div class="hint">${tr(sc.hdr ? 'clear: Liste leeren' : 'Zeile ' + (sc.row + 1) + ' · delete: Wert entfernen')}</div>`;
   };
   sc.cmd = c => {
     switch (c.k) {
+      case 'tap': { if (sc.edit && !commit()) return true; const p = c.key.split(':'); if (p[0] === 'd') { sc.hdr = false; sc.row = +p[1]; sc.col = +p[2]; } else { sc.hdr = true; sc.col = +p[1]; } return true; }
       case 'nav': {
         if (sc.edit && edCmd(sc.edit, c, {})) return true;
         if (sc.edit && (c.d === 'up' || c.d === 'down')) { if (!commit()) return true; }
@@ -514,6 +527,7 @@ function renderAll() {
   if (ST.off) { lcd.innerHTML = ''; lcd.classList.add('off'); indL.innerHTML = ''; indR.innerHTML = ''; return; }
   lcd.classList.remove('off');
   const sc = cur();
+  lcd.classList.toggle('gr', sc.type === 'graph');
   lcd.innerHTML = sc.render();
   announce(sc);
   const fmtTxt = (S.fmt.mode !== 'NORM' ? S.fmt.mode + ' ' : '') + (S.fmt.dec !== 'F' ? 'FIX' + S.fmt.dec : '');
@@ -650,3 +664,11 @@ function fit() {
 window.addEventListener('resize', fit);
 init();
 fit();
+
+/* Tippen/Klicken auf Bildschirm-Elemente (Touch und Maus): Menues, Formulare, Buttons, Listen, Mode, Verlauf */
+lcd.addEventListener('click', e => {
+  if (ST.off || cur().type === 'graph') return;
+  const t = e.target.closest ? e.target.closest('[data-tap]') : null;
+  if (!t || !lcd.contains(t)) return;
+  run({ k: 'tap', key: t.getAttribute('data-tap') });
+});

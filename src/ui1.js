@@ -313,13 +313,14 @@ function openMenu(def) {
     type: 'menu', overlay: true, def, tab: 0, sel: 0,
     editor() { return null; },
     render() {
-      const tabs = def.tabs.length > 1 ? `<div class="mtabs">${def.tabs.map((t, i) => `<span class="${i === sc.tab ? 'on' : ''}">${esc(t.name)}</span>`).join('')}</div>` : `<div class="mtabs"><span class="on">${esc(def.title)}</span></div>`;
+      const tabs = def.tabs.length > 1 ? `<div class="mtabs">${def.tabs.map((t, i) => `<span class="${i === sc.tab ? 'on' : ''}" data-tap="t:${i}">${esc(t.name)}</span>`).join('')}</div>` : `<div class="mtabs"><span class="on">${esc(def.title)}</span></div>`;
       const items = def.tabs[sc.tab].items;
-      return tabs + '<div class="mlst">' + items.map((it, i) => `<div class="mi ${i === sc.sel ? 'sel' : ''}"><b>${i < 9 ? i + 1 : i === 9 ? 0 : '·'}</b> ${esc(it.l)}</div>`).join('') + '</div>';
+      return tabs + '<div class="mlst">' + items.map((it, i) => `<div class="mi ${i === sc.sel ? 'sel' : ''}" data-tap="i:${i}"><b>${i < 9 ? i + 1 : i === 9 ? 0 : '·'}</b> ${esc(it.l)}</div>`).join('') + '</div>';
     },
     cmd(c) {
       const items = def.tabs[sc.tab].items;
       switch (c.k) {
+        case 'tap': { const [kind, n] = c.key.split(':'); if (kind === 't') { sc.tab = +n; sc.sel = 0; } else { sc.sel = +n; choose(+n); } return true; }
         case 'nav':
           if (c.d === 'left' || c.d === 'right') { const n = def.tabs.length; sc.tab = (sc.tab + (c.d === 'right' ? 1 : n - 1)) % n; sc.sel = 0; }
           else sc.sel = (sc.sel + (c.d === 'down' ? 1 : items.length - 1)) % items.length;
