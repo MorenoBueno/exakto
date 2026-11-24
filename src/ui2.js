@@ -2,7 +2,7 @@
 const ERR_DE = {
   'SYNTAX': 'Syntaxfehler', 'DOMAIN': 'Wert außerhalb des Definitionsbereichs', 'DIVIDE BY 0': 'Division durch 0',
   'OVERFLOW': 'Zahl zu groß', 'NONREAL ANSWER': 'Ergebnis nicht reell', 'STAT': 'Keine/zu wenige Daten',
-  'NO UNIQUE SOLUTION': 'Keine eindeutige Lösung', 'TOO COMPLEX': 'Ausdruck zu komplex', 'DIMENSION': 'Falsche Größe von Matrix/Vektor', 'SINGULAR MAT': 'Matrix nicht invertierbar',
+  'NO UNIQUE SOLUTION': 'Keine eindeutige Lösung', 'TOO COMPLEX': 'Ausdruck zu komplex', 'TIMEOUT': 'Berechnung dauert zu lange (abgebrochen)', 'DIMENSION': 'Falsche Größe von Matrix/Vektor', 'SINGULAR MAT': 'Matrix nicht invertierbar',
 };
 function openErr(code, onGoto) {
   const sc = {
@@ -128,7 +128,7 @@ function openList(title, lines, onClose) {
     cmd(c) {
       if (c.k === 'tap') { sc.off = +c.key.slice(2); return true; }
       if (c.k === 'nav') { if (c.d === 'up') sc.off = Math.max(0, sc.off - 1); else if (c.d === 'down') sc.off = Math.min(lines.length - 1, sc.off + 1); return true; }
-      if (c.k === 'clear' || c.k === 'enter') { pop(); if (onClose) onClose(); return true; }
+      if (c.k === 'clear' || c.k === 'enter') { const i = sc.off; pop(); if (onClose) onClose(i); return true; }
       if (c.k === 'quit') { goHome(); return true; }
       if (c.k === 'open') { pop(); openByName(c.name); return true; }
       return true;

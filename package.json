@@ -1,6 +1,6 @@
 {
   "name": "exakto",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Exakter wissenschaftlicher Rechner im Browser (HTML/CSS/JS, keine Abhängigkeiten, offline nutzbar).",
   "license": "MIT",
   "private": true,
@@ -9,9 +9,13 @@
     "build": "node scripts/build.mjs",
     "build:standalone": "node scripts/build.mjs && node scripts/standalone.mjs",
     "test": "node scripts/build.mjs && node tests/run.cjs",
+    "test:e2e": "node scripts/build.mjs && node scripts/standalone.mjs && node tests/e2e/run.mjs",
     "serve": "node scripts/build.mjs && node scripts/serve.mjs"
   },
   "engines": {
     "node": ">=20"
+  },
+  "devDependencies": {
+    "playwright-core": "^1.65.1"
   }
 }

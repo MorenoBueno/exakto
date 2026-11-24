@@ -20,7 +20,7 @@ const exportsList = `S, CalcError, X, F, int, isRat, isInt, isZero, toNum, add, 
   buildTree, isOpen, isSep, isClose, isPlain, kindOf, isVarTok, VARS, KIND_PARTS, VERT, structInfo,
   Editor, evalTokens, compileTokens, evalAst, parseTokens, CONSTS, CONVS, FN, cdfNorm, invNormStd,
   calc1Var, calc2Var, REG_TYPES, solveQuadratic, solveCubic, solveSystem, findRoots, expandData, toBig, ev, withLocal,
-  curveFn, niceStep, sampleCurve, fitY, ENG,
+  curveFn, niceStep, sampleCurve, fitY, curveRoots, curveIntersections, curveExtrema, withDeadline, integrate, ENG,
   czMk, czAdd, czSub, czMul, czDiv, czConj, czAbs, czArgUnit, czFromPolar, czPowInt, czPow, czSqrt, czExp, czLn, czFmt,
   matAdd, matSub, matMul, matScale, matT, matDet, matInv, matRank, matRref, matTrace, matPow,
   vecAdd, vecSub, vecDot, vecCross, vecNorm, vecUnit, vecAngle, vecProj, polar, rect, primeFactors, divisors, divRem, setOp, setOf`;

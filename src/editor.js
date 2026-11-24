@@ -337,7 +337,7 @@ function frNoise(val, r) { // Streuung von f auf wenigen benachbarten Gleitkomma
   for (let j = -6; j <= 6; j++) { const v = val(r + j * h); if (Number.isNaN(v)) continue; if (v < lo) lo = v; if (v > hi) hi = v; }
   return hi >= lo ? hi - lo : 0;
 }
-function findRoots(f) {
+function findRoots(f, rng) { // rng = { lo, hi }: nur dieses Intervall (dicht abgetastet), sonst grosser Standardbereich
   const out = [];
   const add1 = (x, confirmed, kind) => {
     const sc = Math.max(1, Math.abs(x));
@@ -349,10 +349,13 @@ function findRoots(f) {
     else if (confirmed && !q.confirmed) { q.x = x; q.confirmed = true; q.kind = kind; }
   };
   const pts = [];
-  for (let k = 0; k <= 4000; k++) pts.push(-100 + k * 0.05);
-  for (let e = 2; e <= 8; e++) { const lo = Math.pow(10, e); for (let k = 1; k <= 200; k++) { pts.push(lo * k / 100 + lo); pts.push(-(lo * k / 100 + lo)); } }
+  if (rng && Number.isFinite(rng.lo) && Number.isFinite(rng.hi) && rng.hi > rng.lo) { for (let k = 0; k <= 4000; k++) pts.push(rng.lo + (rng.hi - rng.lo) * k / 4000); }
+  else {
+    for (let k = 0; k <= 4000; k++) pts.push(-100 + k * 0.05);
+    for (let e = 2; e <= 8; e++) { const lo = Math.pow(10, e); for (let k = 1; k <= 200; k++) { pts.push(lo * k / 100 + lo); pts.push(-(lo * k / 100 + lo)); } }
+  }
   pts.sort((a, b) => a - b);
-  const val = x => { try { const y = f(x); return Number.isFinite(y) ? y : NaN; } catch (e) { return NaN; } };
+  const val = x => { try { const y = f(x); return Number.isFinite(y) ? y : NaN; } catch (e) { if (e && e.code === 'TIMEOUT') throw e; return NaN; } };
   const ys = pts.map(val);
   const sg = Math.sign;
   /* Vorzeichenwechsel zwischen a und b (fa, fb ungleich 0, verschiedene Vorzeichen): Bisektion + Pruefungen */

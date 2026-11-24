@@ -48,7 +48,7 @@ Viele Schul- und Studienrechner rechnen exakt (`2/3 + 1/4 = 11/12`, `√12 = 2�
 - Dezimaleingaben (`0.1`) sind Näherungen; ganzzahlige und Bruch-Eingaben bleiben exakt. Kein vollständiges Computeralgebrasystem.
 - Numerische Nullstellensuche, Integral und Ableitung sind Näherungen. Kein endliches Raster findet garantiert alle Nullstellen.
 - Einheiten gibt es nur im Engineering-Panel (Prüfung je Feld), nicht im Hauptrechner.
-- Berechnungen laufen im Hauptthread; Grenzen für Ausdruckslänge und Zahlengrösse schützen vor Hängern.
+- Berechnungen laufen im Hauptthread; Grenzen für Ausdruckslänge und Zahlengrösse sowie ein Zeitlimit (etwa 6 s, danach `TIMEOUT`) schützen vor Hängern. Ein ⚠ hinter einem Integral heißt: Konvergenz nicht gesichert.
 
 Details: [docs/MATH.md](docs/MATH.md) · [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)
 
@@ -90,9 +90,11 @@ Die Adresse deiner Kopie lautet `https://BENUTZER.github.io/exakto/` (`BENUTZER`
 - [x] **A · Fundament:** Rechenkern mit Tests aus der Projektvision, Grenzen für Ausdruckslänge
 - [x] **B · Öffentliche Alpha:** responsives UI, Tastatur, README, MIT, Pages-Demo, HTML-Download
 - [x] **C · Offline:** PWA, versionierter Cache, lokale Daten
-- [ ] **D · Fachmodule:** Graph-Analyse (Nullstellen, Schnittpunkte), weitere Engineering-Module
-- [ ] Web Worker für abbrechbare lange Berechnungen, Warnung bei fehlender Integral-Konvergenz
-- [ ] Browser-Tests (End-to-End) in der CI, Test auf echten Mobilgeräten und mit Screenreadern
+- [x] **Graph-Analyse:** Nullstellen, Minimum/Maximum, Schnittpunkte, y-Achsenabschnitt; Touch-Bedienung
+- [x] Zeitlimit für lange Rechnungen, Warnung ⚠ bei fehlender Integral-Konvergenz
+- [x] Browser-Tests (End-to-End) in der CI
+- [ ] **D · Fachmodule:** weitere Engineering-Module
+- [ ] Abbrechbare Berechnungen per Web Worker (heute: Zeitlimit von etwa 6 Sekunden), Test auf echten Mobilgeräten und mit Screenreadern
 - [ ] **E · Version 1.0** nach Abschluss der Fachmodule
 
 Beiträge sind willkommen, siehe [CONTRIBUTING.md](CONTRIBUTING.md).

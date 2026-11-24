@@ -196,3 +196,4 @@ html[data-theme="light"] .tout.err{background:#fdecec;border-color:#f0b4b4;color
 }
 .lcd.gr{touch-action:none;overflow:hidden}
 [data-tap]{cursor:pointer}
+.wn{color:#b45309;font-weight:700;margin-left:4px}

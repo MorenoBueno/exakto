@@ -78,7 +78,8 @@ function openGraph(items) {
       if (c.k === 'bin' && c.t === '-') { sc.zoom(1 / 0.7); return true; }
       if (c.k === 'tok' && c.t[0] === '0') { sc.reset(); return true; }
       if (c.k === 'tok' && c.t[0] === '9') { sc.fit(); return true; }
-      if (c.k === 'clear' || c.k === 'enter') { pop(); return true; }
+      if (c.k === 'enter') { openMenu(graphAnalysisMenu(sc)); return true; }
+      if (c.k === 'clear') { pop(); return true; }
       if (c.k === 'quit') { goHome(); return true; }
       if (c.k === 'open') { pop(); openByName(c.name); return true; }
       return true;
@@ -116,6 +117,36 @@ function initGraphMouse() {
   lcd.addEventListener('pointerup', up); lcd.addEventListener('pointercancel', up);
   const rs = () => { if (!ST.off && cur().type === 'graph') renderAll(); };
   window.addEventListener('resize', rs); window.addEventListener('orientationchange', rs);
+}
+/* ---------- Analyse: Nullstellen, Minimum/Maximum, Schnittpunkte, y-Achsenabschnitt (sichtbares Fenster) ---------- */
+const gf2 = n => (Math.abs(n) < 1e-12 ? '0' : String(Number(n.toPrecision(7)))).replace('-', '−');
+function graphAnalysisMenu(sc) {
+  const w = sc.win, lo = w.xmin, hi = w.xmax, items = sc.items;
+  const show = (title, build) => guard(() => {
+    const rows = withDeadline(8000, build);
+    if (!rows.some(r => r.pt)) rows.push({ html: `<span class="un">${tr('Keine gefunden')}</span>` });
+    openList(title, rows.map(r => r.html), i => { const r = rows[i]; if (r && r.pt) { sc.tx = r.pt.x; sc.ti = r.ti; ST.graphWin = w; } });
+  });
+  const pt = (name, p, ti, ok) => ({ pt: p, ti, html: `<span class="sl">${esc(name)}</span> <span class="sv">x ≈ ${gf2(p.x)} &nbsp; y ≈ ${gf2(p.y)}</span>${ok === false ? ` <span class="un">? ${tr('unbestätigt')}</span>` : ''}` });
+  const head = t => ({ html: `<b>${esc(t)}</b>` });
+  const perFn = (fn) => items.flatMap((it, ti) => { const r = fn(it, ti); return r.length ? [head(it.n + '=' + it.txt)].concat(r) : []; });
+  const note = rows => (rows.some(r => r.html.includes('un">?')) ? rows.concat([{ html: `<span class="un">${tr('? Berührung ohne Vorzeichenwechsel: mehrfache Nullstelle oder Minimum nahe 0')}</span>` }]) : rows);
+  return { title: 'ANALYZE', tabs: [{ name: 'ANALYZE', items: [
+    { l: tr('Nullstellen'), run: () => show('ZERO', () => note(perFn((it, ti) => curveRoots(it.fn, lo, hi).map(p => pt('x₀', p, ti, p.confirmed))))) },
+    { l: tr('Minimum'), run: () => show('MINIMUM', () => perFn((it, ti) => curveExtrema(it.fn, lo, hi).min.map(p => pt('min', p, ti)))) },
+    { l: tr('Maximum'), run: () => show('MAXIMUM', () => perFn((it, ti) => curveExtrema(it.fn, lo, hi).max.map(p => pt('max', p, ti)))) },
+    { l: tr('Schnittpunkte'), run: () => show('INTERSECT', () => {
+      if (items.length < 2) return [{ html: `<span class="un">${tr('Mindestens 2 Funktionen nötig')}</span>` }];
+      const rows = [];
+      for (let a = 0; a < items.length; a++) for (let b = a + 1; b < items.length; b++) {
+        const r = curveIntersections(items[a].fn, items[b].fn, lo, hi); const nm = items[a].n + ' ∩ ' + items[b].n;
+        if (r.identical) rows.push(head(nm), { html: `<span class="un">${tr('identisch')}</span>` });
+        else if (r.pts.length) rows.push(head(nm), ...r.pts.map(p => pt('S', p, a, p.confirmed)));
+      }
+      return note(rows);
+    }) },
+    { l: tr('y-Achsenabschnitt'), run: () => show('Y-INTERCEPT', () => items.flatMap((it, ti) => { const y = it.fn(0); return Number.isFinite(y) ? [pt(it.n + '(0)', { x: 0, y }, ti)] : []; })) },
+  ] }] };
 }
 /* Shift+Pfeil verschiebt, +/- zoomt (Tastatur) */
 function graphKey(e) {

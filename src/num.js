@@ -278,6 +278,11 @@ function fmtDMS(v) {
 }
 // dec: true => Dezimaldarstellung erzwingen
 function fmtVal(v, dec) {
+  const r = fmtVal0(v, dec);
+  if (v.warn) return { html: r.html + ' <span class="wn" title="Konvergenz nicht gesichert">⚠</span>', text: r.text + ' ⚠' };
+  return r;
+}
+function fmtVal0(v, dec) {
   if (v.dms) return fmtDMS(v);
   if (v.baseOut) { const n = BigInt(Math.round(v.v)); const t = (n < 0n ? MINUS : '') + babs(n).toString(v.baseOut).toUpperCase() + ({ 2: '₂', 8: '₈', 16: '₁₆' })[v.baseOut]; return { html: esc(t), text: t }; }
   const plainFmt = S.fmt.mode === 'NORM' && S.fmt.dec === 'F';

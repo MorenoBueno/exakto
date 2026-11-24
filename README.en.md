@@ -88,9 +88,11 @@ Your copy will be served at `https://USER.github.io/exakto/`. All paths are rela
 - [x] Calculation core with acceptance tests, limits on expression length
 - [x] Responsive UI, keyboard, README, MIT, Pages demo, HTML download
 - [x] PWA, versioned cache, local data
-- [ ] Graph analysis (roots, intersections), more engineering modules
-- [ ] Web worker for abortable long calculations, warning when integrals do not converge
-- [ ] End-to-end browser tests in CI, tests on real phones and screen readers
+- [x] Graph analysis: zeros, minimum/maximum, intersections, y-intercept; touch support
+- [x] Time limit for long calculations, ⚠ warning when integrals do not converge
+- [x] End-to-end browser tests in CI
+- [ ] More engineering modules
+- [ ] Abortable calculations via web worker (today: time limit of about 6 seconds), tests on real phones and screen readers
 
 See [CONTRIBUTING.md](CONTRIBUTING.md).
 

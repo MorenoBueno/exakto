@@ -225,18 +225,20 @@ function gk15(f, a, b) {
   }
   return [rk * h, Math.abs((rk - rg) * h)];
 }
-function integrate(f, a, b) {
-  if (a === b) return 0;
+function integrate(f, a, b) { // -> { v, warn }: warn = Konvergenz nicht gesichert (Tiefe/Teilungen erschoepft oder Fehlerschaetzung zu gross)
+  if (a === b) return { v: 0, warn: false };
   let sg = 1; if (a > b) { [a, b] = [b, a]; sg = -1; }
-  const stack = [[a, b, 0]]; let total = 0; const tol = 1e-11;
+  const stack = [[a, b, 0]]; let total = 0, errSum = 0, gaveUp = false; const tol = 1e-11;
   let n = 0;
   while (stack.length) {
     const [lo, hi, dep] = stack.pop();
     const [v, e] = gk15(f, lo, hi);
-    if (e <= Math.max(tol * Math.abs(v), 1e-14) || dep > 40 || ++n > 20000) total += v;
+    if (e <= Math.max(tol * Math.abs(v), 1e-14)) total += v;
+    else if (dep > 40 || ++n > 20000) { total += v; errSum += e; gaveUp = true; }
     else { const m = (lo + hi) / 2; stack.push([lo, m, dep + 1], [m, hi, dep + 1]); }
   }
-  return sg * total;
+  const warn = gaveUp && (errSum > 1e-7 * Math.max(Math.abs(total), 1e-3) || !Number.isFinite(total) || Math.abs(total) > 1e12);
+  return { v: sg * total, warn };
 }
 function dfridr(f, x, h) {
   const CON = 1.4, CON2 = CON * CON, NTAB = 10, SAFE = 2;
@@ -461,6 +463,11 @@ function parseTokens(tokens) {
   } catch (e) { if (e instanceof RangeError) err('TOO COMPLEX'); throw e; }
 }
 
+/* ---------- Zeitlimit: lange Rechnungen werden abgebrochen statt die Seite einzufrieren ---------- */
+let DL = 0;                                   // Zeitpunkt (ms), 0 = kein Limit aktiv
+const tick = () => { if (DL && Date.now() > DL) err('TIMEOUT'); };
+function withDeadline(ms, fn) { const prev = DL; if (!prev) DL = Date.now() + ms; try { return fn(); } finally { DL = prev; } }
+
 /* ---------- Auswertung ---------- */
 const lookupVar = (name, cx) => {
   if (cx && cx.local && cx.local[name] !== undefined) return cx.local[name];
@@ -510,17 +517,17 @@ function ev(n, cx) {
       const lo = toBig(ev(n.from, cx)), hi = toBig(ev(n.to, cx));
       if (hi - lo > 1000000n) err('OVERFLOW');
       let acc = n.k === 'sum' ? int(0) : int(1);
-      for (let k = lo; k <= hi; k++) { const v = ev(n.body, withLocal(cx, n.v, X(k))); acc = n.k === 'sum' ? add(acc, v) : mul(acc, v); }
+      for (let k = lo; k <= hi; k++) { tick(); const v = ev(n.body, withLocal(cx, n.v, X(k))); acc = n.k === 'sum' ? add(acc, v) : mul(acc, v); }
       return acc;
     }
     case 'int': {
       const lo = toNum(ev(n.lo, cx)), hi = toNum(ev(n.hi, cx));
-      const f = x => toNum(ev(n.body, withLocal(cx, n.v, F(x))));
-      return F(chk(integrate(f, lo, hi)));
+      const f = x => { tick(); return toNum(ev(n.body, withLocal(cx, n.v, F(x)))); };
+      const r = integrate(f, lo, hi), out = F(chk(r.v)); if (r.warn) out.warn = true; return out;
     }
     case 'deriv': {
       const x0 = toNum(ev(n.at, cx));
-      const f = x => toNum(ev(n.body, withLocal(cx, n.v, F(x))));
+      const f = x => { tick(); return toNum(ev(n.body, withLocal(cx, n.v, F(x)))); };
       return F(chk(dfridr(f, x0, x0 === 0 ? 0.1 : 0.1 * Math.abs(x0))));
     }
   }
@@ -534,9 +541,9 @@ function evalTokens(tokens, opts) {
   if (k >= 0) { if (k === t.length - 2 && isVarTok(t[k + 1])) { store = t[k + 1]; t = t.slice(0, k); } else err('SYNTAX'); }
   const ast = parseTokens(t);
   let v;
-  try { v = ev(ast, (opts && opts.cx) || null); } catch (e) { if (e instanceof RangeError) err('TOO COMPLEX'); throw e; }
+  try { v = withDeadline(6000, () => ev(ast, (opts && opts.cx) || null)); } catch (e) { if (e instanceof RangeError) err('TOO COMPLEX'); throw e; }
   if (store) S.vars[store] = v;
   return v;
 }
 function compileTokens(tokens) { return parseTokens(tokens); }
-function evalAst(ast, local) { return ev(ast, local ? { local } : null); }
+function evalAst(ast, local) { tick(); return withDeadline(6000, () => ev(ast, local ? { local } : null)); }
