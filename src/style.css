@@ -65,6 +65,9 @@ body{min-height:100vh;display:flex;justify-content:center;align-items:center;pad
 .dpad button{background:rgba(255,255,255,.07);color:#cfd8e8;border:0;border-radius:50%;font-size:12px;cursor:pointer;padding:0;transition:background .12s}
 .dpad button:hover{background:rgba(255,255,255,.16)}.dpad button:active,.dpad button.down{background:rgba(255,255,255,.28)}
 .kc{display:flex;flex-direction:column;min-width:0}
+.kc.kc button.s2{width:100%;height:14px;line-height:1;font-size:10.5px;font-weight:600;font-family:inherit;color:#7cc4ff;background:none;border:0;border-radius:0;box-shadow:none;margin:0;padding:0;cursor:pointer;white-space:nowrap;overflow:visible;display:flex;align-items:center;justify-content:center}
+.kc.kc button.s2:hover,.kc.kc button.s2:active{filter:none;transform:none;box-shadow:none;text-decoration:underline}
+@media (pointer:coarse){.kc .s2,.kc.kc button.s2{height:16px}}
 .kc .s2{font-size:10.5px;height:14px;line-height:14px;text-align:center;color:#7cc4ff;white-space:nowrap;overflow:hidden;font-weight:600}
 .kc button{height:38px;border:0;border-radius:11px;font-size:14px;font-weight:600;cursor:pointer;color:#e8edf7;background:#262b36;box-shadow:0 2px 0 #0b0d12,inset 0 1px 0 rgba(255,255,255,.06);font-family:inherit;padding:0;line-height:1.05;margin-bottom:6px;transition:filter .1s,transform .06s}
 .kc button sup,.kc button sub{font-size:.62em;line-height:0;font-style:italic}.kc button sub{margin-left:-1.2em;vertical-align:-.55em}.kc button sup{vertical-align:.5em}
@@ -125,7 +128,7 @@ html[data-theme="light"] .calc{background:linear-gradient(165deg,#f6f8fc,#dde3ee
 html[data-theme="light"] .logo b{color:#1a2233}html[data-theme="light"] .brand .tag{color:#6b768c}
 html[data-theme="light"] .hbtn{border-color:rgba(20,30,50,.2);background:rgba(20,30,50,.05);color:#4a5670}
 html[data-theme="light"] .hbtn:hover{background:rgba(20,30,50,.12);color:#111}
-html[data-theme="light"] .kc .s2{color:#2f6fb4}
+html[data-theme="light"] .kc .s2,html[data-theme="light"] .kc.kc button.s2{color:#2f6fb4}
 html[data-theme="light"] .kc button{background:#fff;color:#243047;box-shadow:0 2px 0 #b9c2d3,inset 0 1px 0 #fff;border:1px solid rgba(20,30,50,.08)}
 html[data-theme="light"] .kfn button{background:#eef1f7;color:#2c3850}
 html[data-theme="light"] .knum button{background:#fff;color:#16203a}
@@ -155,14 +158,6 @@ html[data-theme="light"] .abtn{border-color:rgba(20,30,50,.2);background:#fff;co
 /* Menue, Engineering, Barrierefreiheit */
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 .logo .lg{border-radius:6px;box-shadow:0 0 12px rgba(96,165,250,.35)}
-.mwrap{position:relative}
-.mlist{position:absolute;right:0;top:36px;z-index:9;min-width:250px;background:#1a1f2b;border:1px solid rgba(255,255,255,.12);border-radius:12px;padding:5px;box-shadow:0 16px 40px rgba(0,0,0,.5)}
-.mlist[hidden]{display:none}
-.mlist button{display:flex;align-items:center;gap:8px;width:100%;text-align:left;border:0;background:transparent;color:#dbe3f2;padding:9px 10px;border-radius:8px;font:500 13.5px inherit;font-family:inherit;cursor:pointer}
-.mlist button:hover,.mlist button:focus-visible{background:rgba(255,255,255,.1)}
-.mlist button kbd{margin-left:auto;font:11px ui-monospace,Consolas,monospace;color:#8e99ae;border:1px solid #39414f;border-radius:4px;padding:0 5px}
-html[data-theme="light"] .mlist{background:#fff;border-color:rgba(20,30,50,.15);box-shadow:0 16px 40px rgba(40,55,90,.25)}
-html[data-theme="light"] .mlist button{color:#243047}html[data-theme="light"] .mlist button:hover,html[data-theme="light"] .mlist button:focus-visible{background:#eef2fa}
 .tools .tabs{display:flex;flex-wrap:wrap;margin:10px 0}.tools .tabs button{flex:1 1 auto}
 .tfields{display:grid;gap:8px}.tf{display:grid;gap:3px;font-size:13px;color:#c3cbdb}.tf small{color:#7d889c;margin-left:6px}.tf i{font-style:normal;opacity:.7}
 .tf input{width:100%;background:#0f131a;border:1px solid rgba(255,255,255,.16);border-radius:8px;color:#eef2fb;padding:9px 10px;font:15px ui-monospace,Consolas,monospace}
@@ -175,7 +170,7 @@ html[data-theme="light"] .tf{color:#3a4660}html[data-theme="light"] .tf input{ba
 html[data-theme="light"] .tout{background:#eaf3ff;border-color:#b9d4f5}html[data-theme="light"] .tout th{color:#46618a}html[data-theme="light"] .tout td{color:#16203a}
 html[data-theme="light"] .tout.err{background:#fdecec;border-color:#f0b4b4;color:#7a1f1f}
 /* Touch-Ziele mindestens 44 x 44 px auf Touchgeraeten */
-@media (pointer:coarse){.kc button{height:44px}.hbtn{width:44px;height:44px}.dpad button{min-height:40px}.seg button{padding:11px 14px}.abtn{padding:12px}.hclose{width:44px;height:44px}.mlist button{padding:13px 12px}}
+@media (pointer:coarse){.kc button{height:44px}.hbtn{width:44px;height:44px}.dpad button{min-height:40px}.seg button{padding:11px 14px}.abtn{padding:12px}.hclose{width:44px;height:44px}}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 .kc button:focus-visible,.dpad button:focus-visible,.hbtn:focus-visible{outline:3px solid #7cc4ff;outline-offset:2px}
 /* Handy (Hochformat): ganze Oberflaeche passt auf den Bildschirm, kein Scrollen. Display nimmt den restlichen Platz. */
@@ -189,8 +184,9 @@ html[data-theme="light"] .tout.err{background:#fdecec;border-color:#f0b4b4;color
   .screen .lcd{flex:1 1 auto;height:auto;min-height:0}
   .keys{flex:none;margin-top:8px}
   .kc button{height:clamp(28px,5dvh,46px);margin-bottom:3px;border-radius:10px}
-  .kc .s2{height:12px;line-height:12px;font-size:10px}
+  .kc .s2,.kc.kc button.s2{height:12px;font-size:10px}
   .hbtn{width:34px;height:34px}
+  .mtabs{font-size:12px;gap:2px;margin-bottom:3px}.mtabs span{padding:0 5px}.mi{font-size:15.5px;line-height:1.25}
   .dpad{padding:4px;gap:2px;border-radius:30px}
   .dpad button{min-height:0;border-radius:14px;font-size:19px;line-height:1}
 }

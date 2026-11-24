@@ -8,7 +8,7 @@ const src = f => readFileSync(join(root, 'src', f), 'utf8');
 const dist = join(root, 'dist');
 mkdirSync(dist, { recursive: true });
 
-const files = ['num.js', 'parse.js', 'editor.js', 'graphcore.js', 'eng.js', 'linalg.js', 'ui1.js', 'ui2.js', 'ui3.js', 'graph.js', 'tools.js', 'settings.js'];
+const files = ['num.js', 'parse.js', 'editor.js', 'graphcore.js', 'eng.js', 'linalg.js', 'ui1.js', 'ui2.js', 'ui3.js', 'graph.js', 'tools.js', 'fmenu.js', 'settings.js'];
 const js = files.map(src).join('\n');
 const html = src('template.html').replace('/*CSS*/', () => src('style.css')).replace('/*JS*/', () => js);
 if (/\/\*(CSS|JS)\*\//.test(html)) throw new Error('Platzhalter nicht ersetzt');

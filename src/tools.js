@@ -80,7 +80,7 @@ function showPanel(name) {
   if (!name) { try { document.body.focus(); } catch (e) { /* egal */ } }
 }
 const panelOpen = () => document.getElementById('helpPanel').classList.contains('open') ? 'help' : document.getElementById('toolsPanel').classList.contains('open') ? 'tools' : null;
-function closeMenu() { const m = document.getElementById('menuList'); if (m) { m.hidden = true; document.getElementById('menuBtn').setAttribute('aria-expanded', 'false'); } }
+const closeMenu = () => { };
 function doMenu(act) {
   closeMenu();
   if (act === 'calc') { showPanel(null); goHome(); renderAll(); }
@@ -89,15 +89,7 @@ function doMenu(act) {
   else if (act === 'help') showPanel('help');
 }
 function initMenu() {
-  const b = document.getElementById('menuBtn'), m = document.getElementById('menuList');
-  b.addEventListener('click', e => { e.stopPropagation(); const open = m.hidden; m.hidden = !open; b.setAttribute('aria-expanded', open ? 'true' : 'false'); if (open) { const f = m.querySelector('button'); if (f) f.focus(); } });
-  m.querySelectorAll('[data-act]').forEach(x => x.addEventListener('click', () => doMenu(x.dataset.act)));
-  m.addEventListener('keydown', e => {
-    const items = [...m.querySelectorAll('button')], i = items.indexOf(document.activeElement);
-    if (e.key === 'ArrowDown') { e.preventDefault(); items[(i + 1) % items.length].focus(); }
-    else if (e.key === 'ArrowUp') { e.preventDefault(); items[(i + items.length - 1) % items.length].focus(); }
-    else if (e.key === 'Escape') { e.preventDefault(); e.stopPropagation(); closeMenu(); b.focus(); }
-  });
-  document.addEventListener('click', e => { if (!m.hidden && !e.target.closest('.mwrap')) closeMenu(); });
+  const b = document.getElementById('menuBtn');
+  b.addEventListener('click', e => { e.stopPropagation(); openFunctionMenu(); });
   document.getElementById('toolsPanel').addEventListener('click', e => { if (e.target.id === 'toolsPanel') showPanel(null); });
 }

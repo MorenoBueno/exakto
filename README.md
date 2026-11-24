@@ -16,7 +16,7 @@ Brüche, Wurzeln und π bleiben exakt – als Schulbuch-Darstellung, offline nut
 
 [Deutsch](README.md) · [English](README.en.md)
 
-<img src="docs/screenshot-dark.png" width="300" alt="Exakto dunkel"> &nbsp; <img src="docs/screenshot-light.png" width="300" alt="Exakto hell">
+<img src="docs/screenshot-dark.png" width="260" alt="Exakto dunkel"> &nbsp; <img src="docs/screenshot-light.png" width="260" alt="Exakto hell"> &nbsp; <img src="docs/screenshot-menu.png" width="260" alt="Funktionsmenü">
 
 </div>
 
@@ -39,7 +39,7 @@ Viele Schul- und Studienrechner rechnen exakt (`2/3 + 1/4 = 11/12`, `√12 = 2�
 - **Offline & installierbar (PWA)** – ohne Server, ohne Tracking, ohne Abhängigkeiten. Zusätzlich als **eine einzige HTML-Datei** (`exakto.html`).
 
 <div align="center">
-<img src="docs/screenshot-graph.png" width="260" alt="Graphenmodus"> &nbsp; <img src="docs/screenshot-tools.png" width="420" alt="Elektrotechnik">
+<img src="docs/screenshot-graph.png" width="240" alt="Graphenmodus"> &nbsp; <img src="docs/screenshot-menu-algebra.png" width="240" alt="Menü Algebra"> &nbsp; <img src="docs/screenshot-phone.png" width="200" alt="Handy-Ansicht"><br><img src="docs/screenshot-tools.png" width="520" alt="Elektrotechnik">
 </div>
 
 ## Bekannte Grenzen
@@ -60,7 +60,7 @@ Details: [docs/MATH.md](docs/MATH.md) · [docs/ARCHITECTURE.md](docs/ARCHITECTUR
 
 **Als App:** Auf der Pages-Adresse im Browser „Installieren“ bzw. „Zum Startbildschirm“ wählen.
 
-Das Menü (Gitter-Symbol) wechselt zwischen Wissenschaftlich, Graph und Engineering; Einstellungen und Bedienung stehen hinter dem **?**-Knopf (oder Taste `?` / `F1`). Wichtigste Kürzel: Ziffern/Numpad wie gewohnt, `^` Hochzahl, `Enter`, `Esc` = clear, Pfeiltasten navigieren, `Tab` = 2nd, `S C T L` sin/cos/tan/ln·log.
+**Funktionsmenü:** Das Gitter-Symbol oben öffnet alle Funktionen nach Kategorien (CALC, SOLVE, ALGEBRA, STAT, NUM, TOOLS, APP), mit Tab „RECENT“ für zuletzt benutzte – ohne 2nd. Auch die **blauen Zweitfunktions-Beschriftungen** über den Tasten sind direkt antippbar. Wechsel zu Graph/Engineering über TOOLS (oder `F2`/`F3`). Einstellungen und Bedienung stehen hinter dem **?**-Knopf (oder Taste `?` / `F1`). Wichtigste Kürzel: Ziffern/Numpad wie gewohnt, `^` Hochzahl, `Enter`, `Esc` = clear, Pfeiltasten navigieren, `Tab` = 2nd, `S C T L` sin/cos/tan/ln·log.
 
 ## Entwicklung
 
@@ -69,6 +69,7 @@ Voraussetzung: Node.js ≥ 20, sonst nichts.
 ```bash
 npm ci                    # Abhängigkeiten (aktuell keine) laut Lockfile
 npm test                  # baut dist/ und führt alle Tests aus
+npm run test:e2e          # Browser-Tests (benötigt Chrome/Chromium; CHROME_PATH setzen)
 npm run build             # Website -> dist/
 npm run build:standalone  # Einzeldatei -> release/exakto.html
 npm run serve             # http://localhost:8080 (für PWA / Service Worker)
@@ -81,7 +82,7 @@ Aufbau und Datenfluss: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md). Beiträge: 
 1. Repository forken oder den Inhalt in ein eigenes öffentliches Repository `exakto` pushen (Branch `main`).
 2. **Settings → Pages → Source: GitHub Actions** wählen.
 3. `pages.yml` testet, baut und veröffentlicht bei jedem Push auf `main`; `ci.yml` prüft zusätzlich Pull Requests ohne Schreibrechte.
-4. Für einen Download-Release: Tag `v1.1.0` pushen, `release.yml` hängt `exakto.html` an.
+4. Für einen Download-Release: Tag `v1.2.0` pushen, `release.yml` hängt `exakto.html` an.
 
 Die Adresse deiner Kopie lautet `https://BENUTZER.github.io/exakto/` (`BENUTZER` ersetzen). Alle Pfade sind relativ, das Projekt läuft im Unterpfad. GitHub Pages und Actions sind für öffentliche Repositories kostenlos.
 
@@ -93,6 +94,7 @@ Die Adresse deiner Kopie lautet `https://BENUTZER.github.io/exakto/` (`BENUTZER`
 - [x] **Graph-Analyse:** Nullstellen, Minimum/Maximum, Schnittpunkte, y-Achsenabschnitt; Touch-Bedienung
 - [x] Zeitlimit für lange Rechnungen, Warnung ⚠ bei fehlender Integral-Konvergenz
 - [x] Browser-Tests (End-to-End) in der CI
+- [x] Funktionsmenü nach Kategorien, antippbare Zweitfunktionen
 - [ ] **D · Fachmodule:** weitere Engineering-Module
 - [ ] Abbrechbare Berechnungen per Web Worker (heute: Zeitlimit von etwa 6 Sekunden), Test auf echten Mobilgeräten und mit Screenreadern
 - [ ] **E · Version 1.0** nach Abschluss der Fachmodule

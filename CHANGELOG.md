@@ -1,6 +1,8 @@
 # Changelog
 
 ## 1.2.0
+- **Funktionsmenü** (Gitter-Symbol): alle Funktionen nach Kategorien, Tab „RECENT“ mit zuletzt benutzten, ohne 2nd erreichbar
+- **Antippbare Zweitfunktionen:** die blauen Beschriftungen über den Tasten lösen die Funktion direkt aus
 - **Zweitfunktionen:** komplexe Zahlen (`complex`), Matrizen A–C bis 4×4 (`matrix`), Vektoren 2D/3D (`vector`), `op` (Pol/Rec, Primfaktoren, Teiler, Division mit Rest) und `set op` (Mengen aus L1–L3)
 - **Numerischer Löser:** Nullstellen nur bei nachgewiesenem Vorzeichenwechsel und über dem Rundungsrauschen bestätigt; Berührungen werden als „unbestätigt“ markiert, positive Minima und Polstellen sind keine Lösungen; Anzeige immer mit ≈
 - **Graph-Analyse** (Enter im Graphen): Nullstellen, Minimum/Maximum, Schnittpunkte, y-Achsenabschnitt
@@ -8,7 +10,7 @@
 - **Handy:** Oberfläche passt im Hochformat auf den Bildschirm (kein Scrollen), größeres Pfeilfeld
 - **Sicherheit:** Zeitlimit für lange Rechnungen (`TIMEOUT`), Warnung ⚠ bei nicht gesicherter Integral-Konvergenz
 - **Fehler behoben:** `√0` wurde als „√0“ statt 0 angezeigt; Display-Menüs waren im Dunkelmodus kaum lesbar
-- Browser-Tests (End-to-End) in der CI
+- Browser-Tests (End-to-End) in der CI, neue Screenshots und überarbeitete READMEs
 
 ## 1.1.0
 - **Graphenmodus (F2):** bis zu drei Funktionen, Zoom, Verschieben, Trace; Polstellen und Definitionslücken werden nicht verbunden

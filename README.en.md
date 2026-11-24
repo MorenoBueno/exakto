@@ -16,7 +16,7 @@ Fractions, roots and π stay exact – textbook-style display, works offline, ze
 
 [Deutsch](README.md) · [English](README.en.md)
 
-<img src="docs/screenshot-dark.png" width="300" alt="Exakto dark"> &nbsp; <img src="docs/screenshot-light.png" width="300" alt="Exakto light">
+<img src="docs/screenshot-dark.png" width="260" alt="Exakto dark"> &nbsp; <img src="docs/screenshot-light.png" width="260" alt="Exakto light"> &nbsp; <img src="docs/screenshot-menu.png" width="260" alt="Function menu">
 
 </div>
 
@@ -39,7 +39,7 @@ Many school and university calculators work exactly (`2/3 + 1/4 = 11/12`, `√12
 - **Offline and installable (PWA)** – no server, no tracking, no dependencies. Also available as **one single HTML file** (`exakto.html`).
 
 <div align="center">
-<img src="docs/screenshot-graph.png" width="260" alt="Graph mode"> &nbsp; <img src="docs/screenshot-tools.png" width="420" alt="Electrical tools">
+<img src="docs/screenshot-graph.png" width="240" alt="Graph mode"> &nbsp; <img src="docs/screenshot-menu-algebra.png" width="240" alt="Algebra menu"> &nbsp; <img src="docs/screenshot-phone.png" width="200" alt="Phone view"><br><img src="docs/screenshot-tools.png" width="520" alt="Electrical tools">
 </div>
 
 ## Known limits
@@ -60,7 +60,7 @@ Details: [docs/MATH.md](docs/MATH.md) · [docs/ARCHITECTURE.md](docs/ARCHITECTUR
 
 **As an app:** on the Pages address choose “Install” / “Add to Home Screen”.
 
-The menu (grid icon) switches between scientific, graph and engineering; settings and help are behind the **?** button (or the `?` / `F1` key).
+**Function menu:** the grid icon at the top opens every function by category (CALC, SOLVE, ALGEBRA, STAT, NUM, TOOLS, APP), with a RECENT tab for recently used ones – no 2nd needed. The **blue second-function labels** above the keys are tappable too. Switch to graph/engineering via TOOLS (or `F2`/`F3`). Settings and help are behind the **?** button (or the `?` / `F1` key).
 
 ## Development
 
@@ -69,6 +69,7 @@ Requires Node.js ≥ 20, nothing else.
 ```bash
 npm ci                    # install (currently no dependencies) per lockfile
 npm test                  # builds dist/ and runs all tests
+npm run test:e2e          # browser tests (needs Chrome/Chromium; set CHROME_PATH)
 npm run build             # website -> dist/
 npm run build:standalone  # single file -> release/exakto.html
 npm run serve             # http://localhost:8080 (for PWA / service worker)
@@ -79,7 +80,7 @@ npm run serve             # http://localhost:8080 (for PWA / service worker)
 1. Fork the repository, or push this folder to your own public repository `exakto` (branch `main`).
 2. **Settings → Pages → Source: GitHub Actions**.
 3. `pages.yml` tests, builds and publishes on every push to `main`; `ci.yml` also checks pull requests without write permissions.
-4. For a download release push a tag such as `v1.1.0`; `release.yml` attaches `exakto.html`.
+4. For a download release push a tag such as `v1.2.0`; `release.yml` attaches `exakto.html`.
 
 Your copy will be served at `https://USER.github.io/exakto/`. All paths are relative, so the project works in a sub-path. GitHub Pages and Actions are free for public repositories.
 
@@ -91,6 +92,7 @@ Your copy will be served at `https://USER.github.io/exakto/`. All paths are rela
 - [x] Graph analysis: zeros, minimum/maximum, intersections, y-intercept; touch support
 - [x] Time limit for long calculations, ⚠ warning when integrals do not converge
 - [x] End-to-end browser tests in CI
+- [x] Categorized function menu, tappable second-function labels
 - [ ] More engineering modules
 - [ ] Abortable calculations via web worker (today: time limit of about 6 seconds), tests on real phones and screen readers
 

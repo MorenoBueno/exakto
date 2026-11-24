@@ -12,7 +12,13 @@ const EN_TXT = {
   'Bruchanzeige: ': 'Fraction display: ', ' nicht enthalten': ' not included', ' geleert': ' cleared',
   'Syntaxfehler': 'Syntax error', 'Wert außerhalb des Definitionsbereichs': 'Value outside the domain', 'Division durch 0': 'Division by zero',
   'Zahl zu groß': 'Number too large', 'Ergebnis nicht reell': 'Result is not real', 'Keine/zu wenige Daten': 'No or too little data',
-  'Keine eindeutige Lösung': 'No unique solution', 'Ausdruck zu komplex': 'Expression too complex', 'Keine Lösung gefunden': 'No solution found', 'Keine bestätigte Lösung': 'No confirmed solution', '? Berührung ohne Vorzeichenwechsel: mehrfache Nullstelle oder Minimum nahe 0': '? Touches zero without sign change: multiple root or minimum near 0', 'unbestätigt': 'unconfirmed', 'z₁ ∘ z₂  (+ − × ÷ ^)': 'z₁ ∘ z₂  (+ − × ÷ ^)', 'Funktion von z  (|z|, arg, √ …)': 'Function of z  (|z|, arg, √ …)', 'Rechnen (det, X⁻¹, ×, …)': 'Calculate (det, X⁻¹, ×, …)', 'Matrix bearbeiten:': 'Edit matrix:', 'Nullstellen': 'Zeros', 'Minimum': 'Minimum', 'Maximum': 'Maximum', 'Schnittpunkte': 'Intersections', 'y-Achsenabschnitt': 'y-intercept', 'Keine gefunden': 'None found', 'identisch': 'identical', 'Mindestens 2 Funktionen nötig': 'At least 2 functions needed', 'Berechnung dauert zu lange (abgebrochen)': 'Calculation takes too long (aborted)', 'gespeichert (Wurzeln als Dezimalwert)': 'stored (roots as decimals)', 'gespeichert': 'stored', 'Primfaktoren': 'Prime factors', 'Teiler': 'Divisors', 'Division mit Rest': 'Division with remainder', 'Primzahl': 'prime number', 'Anzahl': 'Count', 'leere Menge': 'empty set', 'Falsche Größe von Matrix/Vektor': 'Wrong size of matrix/vector', 'Matrix nicht invertierbar': 'Matrix is not invertible', 'Regression: ': 'Regression: ',
+  'Keine eindeutige Lösung': 'No unique solution', 'Ausdruck zu komplex': 'Expression too complex', 'Keine Lösung gefunden': 'No solution found', 'Keine bestätigte Lösung': 'No confirmed solution', '? Berührung ohne Vorzeichenwechsel: mehrfache Nullstelle oder Minimum nahe 0': '? Touches zero without sign change: multiple root or minimum near 0', 'unbestätigt': 'unconfirmed', 'z₁ ∘ z₂  (+ − × ÷ ^)': 'z₁ ∘ z₂  (+ − × ÷ ^)', 'Funktion von z  (|z|, arg, √ …)': 'Function of z  (|z|, arg, √ …)', 'Rechnen (det, X⁻¹, ×, …)': 'Calculate (det, X⁻¹, ×, …)', 'Matrix bearbeiten:': 'Edit matrix:', 'Bruch a/b': 'Fraction a/b', 'Gemischte Zahl': 'Mixed number', 'Potenz xⁿ': 'Power xⁿ', 'Wurzel √': 'Root √', 'n-te Wurzel': 'nth root', 'Betrag |x|': 'Absolute value |x|', 'Summe Σ': 'Sum Σ', 'Produkt Π': 'Product Π', 'Integral ∫': 'Integral ∫', 'Ableitung d/dx': 'Derivative d/dx',
+  'Gleichung lösen (numerisch)': 'Solve equation (numeric)', 'Polynom (Grad 2/3)': 'Polynomial (degree 2/3)', 'Ausdruck auswerten': 'Evaluate expression', 'Wertetabelle': 'Value table',
+  'Komplexe Zahlen': 'Complex numbers', 'Matrizen': 'Matrices', 'Vektoren': 'Vectors', 'Pol, Rec, Primfaktoren …': 'Pol, Rec, prime factors …', 'Mengen (L1–L3)': 'Sets (L1–L3)',
+  'Daten (L1–L3)': 'Data (L1–L3)', 'Statistik 1-Var / 2-Var': 'Statistics 1-Var / 2-Var', 'Verteilungen': 'Distributions', 'Wahrscheinlichkeit (nCr, nPr, !)': 'Probability (nCr, nPr, !)', 'Zufallszahlen': 'Random numbers',
+  'Mathe-Funktionen': 'Math functions', 'Zahlensysteme (Bin, Oct, Hex)': 'Number bases (Bin, Oct, Hex)', 'Umrechnung (Einheiten)': 'Conversion (units)', 'Konstanten': 'Constants', 'Winkel (°, rad, gon)': 'Angle (°, rad, gon)', 'Polar ⇄ Kartesisch': 'Polar ⇄ Cartesian',
+  'Variablen': 'Variables', 'Wert speichern →': 'Store value →', 'Wert abrufen': 'Recall value', 'Graph zeichnen (F2)': 'Draw graph (F2)', 'Engineering · Elektrotechnik (F3)': 'Engineering · Electrical (F3)',
+  'Rechner (Startbildschirm)': 'Calculator (home)', 'Modus (Winkel, Format, Stellen)': 'Mode (angle, format, digits)', 'Einstellungen & Hilfe (?)': 'Settings & help (?)', 'Zurücksetzen …': 'Reset …', 'Nullstellen': 'Zeros', 'Minimum': 'Minimum', 'Maximum': 'Maximum', 'Schnittpunkte': 'Intersections', 'y-Achsenabschnitt': 'y-intercept', 'Keine gefunden': 'None found', 'identisch': 'identical', 'Mindestens 2 Funktionen nötig': 'At least 2 functions needed', 'Berechnung dauert zu lange (abgebrochen)': 'Calculation takes too long (aborted)', 'gespeichert (Wurzeln als Dezimalwert)': 'stored (roots as decimals)', 'gespeichert': 'stored', 'Primfaktoren': 'Prime factors', 'Teiler': 'Divisors', 'Division mit Rest': 'Division with remainder', 'Primzahl': 'prime number', 'Anzahl': 'Count', 'leere Menge': 'empty set', 'Falsche Größe von Matrix/Vektor': 'Wrong size of matrix/vector', 'Matrix nicht invertierbar': 'Matrix is not invertible', 'Regression: ': 'Regression: ',
   'clear: Liste leeren': 'clear: empty list', 'Zeile ': 'Row ', 'delete: Wert entfernen': 'delete: remove value',
   'b  binär': 'b  binary', 'o  oktal': 'o  octal', 'h  hexadezimal': 'h  hexadecimal', 'd  dezimal': 'd  decimal',
   'Numerischer Löser (Gleichung)': 'Numeric solver (equation)', 'Polynom (Grad 2/3)': 'Polynomial (degree 2/3)', 'Gleichungssystem (2/3)': 'System of equations (2/3)',
@@ -213,7 +219,7 @@ function keyCell(id) {
   const k = KEYS[id];
   const al = KEY_AL[id] || plainHTML(k.h); const al2 = k.s ? plainHTML(k.s) : '';
   const label = (al + (al2 ? '. 2nd: ' + al2 : '')).replace(/"/g, '');
-  return `<div class="kc ${k.cls || ''}"><span class="s2" aria-hidden="true">${k.s ? k.s : '&nbsp;'}</span><button type="button" data-k="${id}" aria-label="${label}">${k.h}</button></div>`;
+  return `<div class="kc ${k.cls || ''}">${k.s && k.sc ? `<button type="button" class="s2" tabindex="-1" aria-hidden="true" data-k2="${id}">${k.s}</button>` : `<span class="s2" aria-hidden="true">${k.s ? k.s : '&nbsp;'}</span>`}<button type="button" data-k="${id}" aria-label="${label}">${k.h}</button></div>`;
 }
 function buildKeypad() {
   let h = '<div class="main">';
@@ -337,6 +343,7 @@ function openMenu(def) {
   function choose(i) {
     const it = def.tabs[sc.tab].items[i]; if (!it) return;
     pop();
+    if (it.onChoose) it.onChoose();
     if (it.run) { it.run(); return; }
     const b = cur(); const E = b.editor && b.editor();
     if (!E) return;

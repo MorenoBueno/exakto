@@ -646,7 +646,7 @@ function init() {
   buildKeypad();
   load();
   $('#keys').addEventListener('mousedown', e => { if (e.target.closest('button')) e.preventDefault(); });
-  $('#keys').addEventListener('click', e => { const b = e.target.closest('button[data-k]'); if (b) press(b.dataset.k); });
+  $('#keys').addEventListener('click', e => { const t = e.target.closest('[data-k2]'); if (t) { press(t.dataset.k2, true); return; } const b = e.target.closest('button[data-k]'); if (b) press(b.dataset.k); });
   document.addEventListener('keydown', handleKey);
   $('#helpBtn').addEventListener('click', () => toggleHelp());
   $('#helpClose').addEventListener('click', () => toggleHelp(false));

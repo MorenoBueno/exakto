@@ -128,8 +128,40 @@ for (const [w, h, touch, name] of [[390, 844, true, 'Handy'], [360, 640, true, '
   await key(pg, 'C'); await key(pg, 'E'); await key(pg, 'D'); await key(pg, 'D'); await key(pg, 'E'); t = await lcd(pg); ok('Analyse Maximum: x=-1, y=2', t.includes('x ≈ −1') && t.includes('y ≈ 2'), t);
   await done(pg); }
 
+// 8b) Funktionsmenue (Gitter-Symbol) und antippbare blaue Beschriftung
+for (const touch of [true, false]) {
+  const pg = await open({ touch, w: touch ? 390 : 1200, h: touch ? 844 : 900 }); const tap = sel => (touch ? pg.tap(sel) : pg.click(sel)); const tag = touch ? 'Touch' : 'Maus';
+  await tap('#menuBtn'); let t = await lcd(pg); ok(`${tag}: Gitter-Symbol oeffnet Funktionsmenue`, t.includes('CALC') && t.includes('SOLVE') && t.includes('ALGEBRA') && t.includes('Bruch a/b'), t);
+  await tap('#lcd .mi >> nth=8'); t = await lcd(pg); ok(`${tag}: Menue-Eintrag Integral fuegt Struktur ein`, t.includes('∫'), t);
+  await tap('#menuBtn'); t = await lcd(pg); ok(`${tag}: Zuletzt benutzt erscheint`, t.startsWith('RECENT') && t.includes('Integral'), t);
+  await tap('#lcd .mtabs span >> nth=3'); t = await lcd(pg); ok(`${tag}: Tab ALGEBRA zeigt Komplexe Zahlen und Matrizen`, t.includes('Komplexe Zahlen') && t.includes('Matrizen'), t);
+  await tap('#lcd .mi >> nth=1'); t = await lcd(pg); ok(`${tag}: Eintrag Matrizen oeffnet Matrix-Menue`, t.includes('MATRIX'), t);
+  await key(pg, 'C'); await key(pg, 'C'); await tap('#menuBtn'); await tap('#menuBtn'); t = await lcd(pg); ok(`${tag}: zweites Antippen schliesst das Menue`, !t.includes('SOLVE'), t);
+  await key(pg, 'C');
+  const flat = await pg.evaluate(() => { const b = [...document.querySelectorAll('.kc button.s2')]; return { n: b.length, bg: [...new Set(b.map(x => getComputedStyle(x).backgroundColor))].join('|') }; });
+  ok(`${tag}: blaue Beschriftungen sind antippbar (>= 30)`, flat.n >= 30, flat.n); ok(`${tag}: Beschriftung sieht nicht wie eine Taste aus (transparent)`, /^rgba\(0, 0, 0, 0\)$/.test(flat.bg), flat.bg);
+  await tap('.kc .s2[data-k2="math"]'); t = await lcd(pg); ok(`${tag}: Tippen auf "matrix" oeffnet Matrizen ohne 2nd`, t.includes('MATRIX'), t); await key(pg, 'C');
+  await tap('.kc .s2[data-k2="sin"]'); t = await lcd(pg); ok(`${tag}: Tippen auf "num-solv" oeffnet den Loeser`, t.includes('NUM-SOLV'), t); await key(pg, 'C');
+  await tap('.kc .s2[data-k2="nd"]'); await tap('.kc .s2[data-k2="lnlog"]'); t = await lcd(pg); ok(`${tag}: Tippen auf "d/dx" fuegt Ableitung ein`, t.includes('d/dx') || t.includes('dx'), t);
+  const on2 = await pg.evaluate(() => document.querySelector('[data-k="2nd"]').classList.contains('active2')); ok(`${tag}: 2nd bleibt nach Beschriftungs-Tipp aus`, !on2);
+  const e = await done(pg); ok(`${tag}: Funktionsmenue ohne Skriptfehler`, e.length === 0, e.join('|'));
+}
+for (const scheme of ['dark', 'light']) {
+  const pg = await open({ scheme }); await pg.click('#menuBtn');
+  const c = await pg.evaluate(() => {
+    const lum = ([r, g, b]) => { const f = v => { v /= 255; return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4); }; return 0.2126 * f(r) + 0.7152 * f(g) + 0.0722 * f(b); };
+    const rgb = s => (s.match(/[\d.]+/g) || []).map(Number);
+    const bgOf = el => { for (let e = el; e; e = e.parentElement) { const b = rgb(getComputedStyle(e).backgroundColor); if (b.length >= 3 && (b.length < 4 || b[3] > 0.5)) return b.slice(0, 3); } return [255, 255, 255]; };
+    const el = [...document.querySelectorAll('#lcd .mi')].find(e => !e.classList.contains('sel')); const tab = document.querySelector('#lcd .mtabs span:not(.on)');
+    const ratio = e => { const a = lum(rgb(getComputedStyle(e).color).slice(0, 3)), b = lum(bgOf(e)); return (Math.max(a, b) + 0.05) / (Math.min(a, b) + 0.05); };
+    const lab = document.querySelector('.kc button.s2'); const dk = document.documentElement.dataset.theme !== 'light' && matchMedia('(prefers-color-scheme: dark)').matches || document.documentElement.dataset.theme === 'dark'; const la = lum(rgb(getComputedStyle(lab).color).slice(0, 3)), lb = lum(dk ? [24, 27, 36] : [236, 238, 242]); return [ratio(el), ratio(tab), (Math.max(la, lb) + 0.05) / (Math.min(la, lb) + 0.05)];
+  });
+  ok(`Funktionsmenue: Eintraege lesbar (${scheme})`, c[0] >= 4.5, c[0].toFixed(2)); ok(`Funktionsmenue: Tabs lesbar (${scheme})`, c[1] >= 4.5, c[1].toFixed(2)); ok(`Beschriftungen lesbar (${scheme}), Kontrast >= 3`, c[2] >= 3, c[2].toFixed(2));
+  await done(pg);
+}
+
 // 9) Sprache EN und Hilfe
-{ const pg = await open({ locale: 'en-US' }); await second(pg, 'math'); const t = await lcd(pg); ok('EN: Menue englisch', t.includes('Edit matrix'), t); await done(pg); }
+{ const pg = await open({ locale: 'en-US' }); await second(pg, 'math'); let t = await lcd(pg); ok('EN: Menue englisch', t.includes('Edit matrix'), t); await key(pg, 'C'); await key(pg, 'C'); await pg.click('#menuBtn'); t = await lcd(pg); ok('EN: Funktionsmenue englisch', t.includes('Mixed number') && t.includes('Fraction'), t); await done(pg); }
 
 await browser.close();
 console.log(`e2e pass=${pass} fail=${fail}`);
