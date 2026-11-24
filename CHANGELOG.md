@@ -1,7 +1,7 @@
 # Changelog
 
 ## 1.2.0
-- **Funktionsmenü** (Gitter-Symbol): alle Funktionen nach Kategorien, Tab „RECENT“ mit zuletzt benutzten, ohne 2nd erreichbar
+- **Funktionsmenü** (Gitter-Symbol): Ordner mit Symbolen und Unterebenen, Pfad-Leiste, Zurück/Home, „Zuletzt benutzt“, ohne 2nd erreichbar
 - **Antippbare Zweitfunktionen:** die blauen Beschriftungen über den Tasten lösen die Funktion direkt aus
 - **Zweitfunktionen:** komplexe Zahlen (`complex`), Matrizen A–C bis 4×4 (`matrix`), Vektoren 2D/3D (`vector`), `op` (Pol/Rec, Primfaktoren, Teiler, Division mit Rest) und `set op` (Mengen aus L1–L3)
 - **Numerischer Löser:** Nullstellen nur bei nachgewiesenem Vorzeichenwechsel und über dem Rundungsrauschen bestätigt; Berührungen werden als „unbestätigt“ markiert, positive Minima und Polstellen sind keine Lösungen; Anzeige immer mit ≈

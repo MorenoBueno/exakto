@@ -131,12 +131,18 @@ for (const [w, h, touch, name] of [[390, 844, true, 'Handy'], [360, 640, true, '
 // 8b) Funktionsmenue (Gitter-Symbol) und antippbare blaue Beschriftung
 for (const touch of [true, false]) {
   const pg = await open({ touch, w: touch ? 390 : 1200, h: touch ? 844 : 900 }); const tap = sel => (touch ? pg.tap(sel) : pg.click(sel)); const tag = touch ? 'Touch' : 'Maus';
-  await tap('#menuBtn'); let t = await lcd(pg); ok(`${tag}: Gitter-Symbol oeffnet Funktionsmenue`, t.includes('CALC') && t.includes('SOLVE') && t.includes('ALGEBRA') && t.includes('Bruch a/b'), t);
-  await tap('#lcd .mi >> nth=8'); t = await lcd(pg); ok(`${tag}: Menue-Eintrag Integral fuegt Struktur ein`, t.includes('∫'), t);
-  await tap('#menuBtn'); t = await lcd(pg); ok(`${tag}: Zuletzt benutzt erscheint`, t.startsWith('RECENT') && t.includes('Integral'), t);
-  await tap('#lcd .mtabs span >> nth=3'); t = await lcd(pg); ok(`${tag}: Tab ALGEBRA zeigt Komplexe Zahlen und Matrizen`, t.includes('Komplexe Zahlen') && t.includes('Matrizen'), t);
-  await tap('#lcd .mi >> nth=1'); t = await lcd(pg); ok(`${tag}: Eintrag Matrizen oeffnet Matrix-Menue`, t.includes('MATRIX'), t);
-  await key(pg, 'C'); await key(pg, 'C'); await tap('#menuBtn'); await tap('#menuBtn'); t = await lcd(pg); ok(`${tag}: zweites Antippen schliesst das Menue`, !t.includes('SOLVE'), t);
+  await tap('#menuBtn'); let t = await lcd(pg); ok(`${tag}: Gitter-Symbol oeffnet Ordner-Menue`, t.includes('Rechnen') && t.includes('Lösen') && t.includes('Algebra') && t.includes('Statistik'), t);
+  let n = await pg.locator('#lcd .tile').count(); ok(`${tag}: Ordner mit Symbolen (7 Kacheln, je mit Grafik)`, n === 7 && (await pg.locator('#lcd .tile svg').count()) === 7, n);
+  await tap('#lcd .tile >> nth=0'); t = await lcd(pg); ok(`${tag}: Ordner Rechnen oeffnet Unterebene`, t.includes('Bruch') && t.includes('Analysis') && t.includes('Funktionen ›'), t);
+  await tap('#lcd .tile >> nth=6'); t = await lcd(pg); ok(`${tag}: Unterordner Analysis zeigt Summe/Integral`, t.includes('Integral') && t.includes('Ableitung') && t.includes('Analysis'), t);
+  await tap('#lcd [data-tap="b"]'); t = await lcd(pg); ok(`${tag}: Zurueck-Knopf geht eine Ebene hoch`, t.includes('Bruch') && !t.includes('Ableitung'), t);
+  await tap('#lcd .tile >> nth=6'); await tap('#lcd .tile >> nth=2'); t = await lcd(pg); ok(`${tag}: Funktion im Unterordner fuegt Struktur ein und schliesst Menue`, t.includes('∫') && !t.includes('Analysis'), t);
+  await tap('#menuBtn'); t = await lcd(pg); ok(`${tag}: Zuletzt benutzt erscheint zuerst`, t.includes('Zuletzt benutzt'), t);
+  await tap('#lcd .tile >> nth=0'); t = await lcd(pg); ok(`${tag}: Zuletzt benutzt enthaelt Integral`, t.includes('Integral'), t);
+  await tap('#lcd [data-tap="h"]'); await tap('#lcd .tile >> nth=3'); t = await lcd(pg); ok(`${tag}: Home-Knopf springt nach oben, Algebra offen`, t.includes('Komplexe Zahlen') && t.includes('Matrizen'), t);
+  await tap('#lcd .tile >> nth=1'); t = await lcd(pg); ok(`${tag}: Eintrag Matrizen oeffnet Matrix-Menue`, t.includes('MATRIX'), t);
+  await key(pg, 'C'); await key(pg, 'C'); await tap('#menuBtn'); await tap('#lcd .tile >> nth=2'); await tap('#lcd [data-tap="c:0"]'); t = await lcd(pg); ok(`${tag}: Pfad-Leiste springt zur obersten Ebene`, t.includes('Rechnen') && t.includes('Werkzeuge'), t);
+  await tap('#menuBtn'); t = await lcd(pg); ok(`${tag}: zweites Antippen schliesst das Menue`, !t.includes('Werkzeuge'), t);
   await key(pg, 'C');
   const flat = await pg.evaluate(() => { const b = [...document.querySelectorAll('.kc button.s2')]; return { n: b.length, bg: [...new Set(b.map(x => getComputedStyle(x).backgroundColor))].join('|') }; });
   ok(`${tag}: blaue Beschriftungen sind antippbar (>= 30)`, flat.n >= 30, flat.n); ok(`${tag}: Beschriftung sieht nicht wie eine Taste aus (transparent)`, /^rgba\(0, 0, 0, 0\)$/.test(flat.bg), flat.bg);
@@ -152,7 +158,7 @@ for (const scheme of ['dark', 'light']) {
     const lum = ([r, g, b]) => { const f = v => { v /= 255; return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4); }; return 0.2126 * f(r) + 0.7152 * f(g) + 0.0722 * f(b); };
     const rgb = s => (s.match(/[\d.]+/g) || []).map(Number);
     const bgOf = el => { for (let e = el; e; e = e.parentElement) { const b = rgb(getComputedStyle(e).backgroundColor); if (b.length >= 3 && (b.length < 4 || b[3] > 0.5)) return b.slice(0, 3); } return [255, 255, 255]; };
-    const el = [...document.querySelectorAll('#lcd .mi')].find(e => !e.classList.contains('sel')); const tab = document.querySelector('#lcd .mtabs span:not(.on)');
+    const el = [...document.querySelectorAll('#lcd .tile')].find(e => !e.classList.contains('sel')); const tab = document.querySelector('#lcd .fb');
     const ratio = e => { const a = lum(rgb(getComputedStyle(e).color).slice(0, 3)), b = lum(bgOf(e)); return (Math.max(a, b) + 0.05) / (Math.min(a, b) + 0.05); };
     const lab = document.querySelector('.kc button.s2'); const dk = document.documentElement.dataset.theme !== 'light' && matchMedia('(prefers-color-scheme: dark)').matches || document.documentElement.dataset.theme === 'dark'; const la = lum(rgb(getComputedStyle(lab).color).slice(0, 3)), lb = lum(dk ? [24, 27, 36] : [236, 238, 242]); return [ratio(el), ratio(tab), (Math.max(la, lb) + 0.05) / (Math.min(la, lb) + 0.05)];
   });
@@ -161,7 +167,7 @@ for (const scheme of ['dark', 'light']) {
 }
 
 // 9) Sprache EN und Hilfe
-{ const pg = await open({ locale: 'en-US' }); await second(pg, 'math'); let t = await lcd(pg); ok('EN: Menue englisch', t.includes('Edit matrix'), t); await key(pg, 'C'); await key(pg, 'C'); await pg.click('#menuBtn'); t = await lcd(pg); ok('EN: Funktionsmenue englisch', t.includes('Mixed number') && t.includes('Fraction'), t); await done(pg); }
+{ const pg = await open({ locale: 'en-US' }); await second(pg, 'math'); let t = await lcd(pg); ok('EN: Menue englisch', t.includes('Edit matrix'), t); await key(pg, 'C'); await key(pg, 'C'); await pg.click('#menuBtn'); await pg.click('#lcd .tile >> nth=0'); t = await lcd(pg); ok('EN: Funktionsmenue englisch', t.includes('Mixed number') && t.includes('Fraction') && t.includes('Calculus'), t); await done(pg); }
 
 await browser.close();
 console.log(`e2e pass=${pass} fail=${fail}`);

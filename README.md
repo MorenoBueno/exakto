@@ -39,7 +39,7 @@ Viele Schul- und Studienrechner rechnen exakt (`2/3 + 1/4 = 11/12`, `√12 = 2�
 - **Offline & installierbar (PWA)** – ohne Server, ohne Tracking, ohne Abhängigkeiten. Zusätzlich als **eine einzige HTML-Datei** (`exakto.html`).
 
 <div align="center">
-<img src="docs/screenshot-graph.png" width="240" alt="Graphenmodus"> &nbsp; <img src="docs/screenshot-menu-algebra.png" width="240" alt="Menü Algebra"> &nbsp; <img src="docs/screenshot-phone.png" width="200" alt="Handy-Ansicht"><br><img src="docs/screenshot-tools.png" width="520" alt="Elektrotechnik">
+<img src="docs/screenshot-graph.png" width="240" alt="Graphenmodus"> &nbsp; <img src="docs/screenshot-menu-algebra.png" width="240" alt="Menü Algebra"> &nbsp; <img src="docs/screenshot-phone2.png" width="200" alt="Handy-Ansicht mit Unterordner"><br><img src="docs/screenshot-tools.png" width="520" alt="Elektrotechnik">
 </div>
 
 ## Bekannte Grenzen
@@ -60,7 +60,7 @@ Details: [docs/MATH.md](docs/MATH.md) · [docs/ARCHITECTURE.md](docs/ARCHITECTUR
 
 **Als App:** Auf der Pages-Adresse im Browser „Installieren“ bzw. „Zum Startbildschirm“ wählen.
 
-**Funktionsmenü:** Das Gitter-Symbol oben öffnet alle Funktionen nach Kategorien (CALC, SOLVE, ALGEBRA, STAT, NUM, TOOLS, APP), mit Tab „RECENT“ für zuletzt benutzte – ohne 2nd. Auch die **blauen Zweitfunktions-Beschriftungen** über den Tasten sind direkt antippbar. Wechsel zu Graph/Engineering über TOOLS (oder `F2`/`F3`). Einstellungen und Bedienung stehen hinter dem **?**-Knopf (oder Taste `?` / `F1`). Wichtigste Kürzel: Ziffern/Numpad wie gewohnt, `^` Hochzahl, `Enter`, `Esc` = clear, Pfeiltasten navigieren, `Tab` = 2nd, `S C T L` sin/cos/tan/ln·log.
+**Funktionsmenü:** Das Gitter-Symbol oben öffnet alle Funktionen als **Ordner mit Symbolen** (Rechnen, Lösen, Algebra, Statistik, Zahlen, Werkzeuge, Einstellungen; dazu „Zuletzt benutzt“) – ohne 2nd. Ordner können Unterordner enthalten (z. B. Rechnen › Analysis); `←` geht eine Ebene zurück, `⌂` nach ganz oben, die Pfad-Leiste springt direkt zu einer Ebene (Tastatur: Pfeile, `Enter`, `clear`/`Esc` = zurück). Auch die **blauen Zweitfunktions-Beschriftungen** über den Tasten sind direkt antippbar. Wechsel zu Graph/Engineering über TOOLS (oder `F2`/`F3`). Einstellungen und Bedienung stehen hinter dem **?**-Knopf (oder Taste `?` / `F1`). Wichtigste Kürzel: Ziffern/Numpad wie gewohnt, `^` Hochzahl, `Enter`, `Esc` = clear, Pfeiltasten navigieren, `Tab` = 2nd, `S C T L` sin/cos/tan/ln·log.
 
 ## Entwicklung
 
@@ -94,7 +94,7 @@ Die Adresse deiner Kopie lautet `https://BENUTZER.github.io/exakto/` (`BENUTZER`
 - [x] **Graph-Analyse:** Nullstellen, Minimum/Maximum, Schnittpunkte, y-Achsenabschnitt; Touch-Bedienung
 - [x] Zeitlimit für lange Rechnungen, Warnung ⚠ bei fehlender Integral-Konvergenz
 - [x] Browser-Tests (End-to-End) in der CI
-- [x] Funktionsmenü nach Kategorien, antippbare Zweitfunktionen
+- [x] Funktionsmenü als Ordner mit Symbolen und Unterebenen, antippbare Zweitfunktionen
 - [ ] **D · Fachmodule:** weitere Engineering-Module
 - [ ] Abbrechbare Berechnungen per Web Worker (heute: Zeitlimit von etwa 6 Sekunden), Test auf echten Mobilgeräten und mit Screenreadern
 - [ ] **E · Version 1.0** nach Abschluss der Fachmodule

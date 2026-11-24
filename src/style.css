@@ -193,3 +193,18 @@ html[data-theme="light"] .tout.err{background:#fdecec;border-color:#f0b4b4;color
 .lcd.gr{touch-action:none;overflow:hidden}
 [data-tap]{cursor:pointer}
 .wn{color:#b45309;font-weight:700;margin-left:4px}
+/* Funktionsmenue (Ordner) */
+.fbar{display:flex;align-items:center;gap:4px;margin:-2px 0 5px;font-size:13px;font-weight:700}
+.fb{border:1.5px solid var(--lcd-ink);border-radius:6px;padding:0 8px;line-height:24px;cursor:pointer}
+.fb.disabled{opacity:.3;pointer-events:none}
+.fbar .crumbs{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:12px;padding-left:3px}
+.fbar .crumbs a{text-decoration:underline;cursor:pointer}
+.tgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;align-content:start}
+.tile{position:relative;border:1.5px solid var(--lcd-ink);border-radius:9px;padding:6px 2px 4px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;min-height:68px;cursor:pointer}
+.tile svg{width:28px;height:28px}
+.tile .sym{font-size:21px;line-height:28px;height:28px;font-weight:700;font-family:Georgia,"Times New Roman",serif;white-space:nowrap}
+.tile .t{font-size:11px;font-weight:700;line-height:1.1;text-align:center}
+.tile .cnt{position:absolute;right:5px;top:2px;font-size:9.5px;opacity:.7}
+.tile.sel{background:var(--lcd-ink);color:var(--lcd)}
+.ffoot{margin-top:5px;font-size:11px;font-weight:700;opacity:.75;min-height:14px}
+@media (pointer:coarse) and (max-width:600px) and (orientation:portrait){.tile{min-height:58px}.tile svg{width:24px;height:24px}.tile .sym{font-size:18px;line-height:24px;height:24px}.tile .t{font-size:10.5px}}

@@ -11,7 +11,7 @@ Eine Engine, zwei Ausgaben: `npm run build` erzeugt die Website (`dist/`), `npm 
 | `src/eng.js` | SI-Präfixe, Einheitenprüfung, Elektrotechnik (reine Logik) |
 | `src/linalg.js` | Komplexe Zahlen, Matrizen, Vektoren, Mengenoperationen (reine Logik) |
 | `src/ui1.js` / `src/ui2.js` / `src/ui3.js` | Display, Tasten, Menüs, Bildschirme, Tastatur/Touch; ui3: Komplex/Matrix/Vektor-Bildschirme |
-| `src/fmenu.js` | Funktionsmenü (Gitter-Symbol): Kategorien und „zuletzt benutzt“ |
+| `src/fmenu.js` | Funktionsmenü (Gitter-Symbol): Ordnerbaum mit Symbolen, Pfad-Leiste, „zuletzt benutzt“ |
 | `src/graph.js` | Graph-Bildschirm (SVG im Display) |
 | `src/tools.js` | Engineering-Panel, Schnellwechsel (F2/F3) |
 | `tests/e2e/run.mjs` | Browser-Tests (Playwright) gegen `release/exakto.html` |

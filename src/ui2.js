@@ -529,6 +529,7 @@ function renderAll() {
   const sc = cur();
   lcd.classList.toggle('gr', sc.type === 'graph');
   lcd.innerHTML = sc.render();
+  { const ts = lcd.querySelector('.tile.sel'); if (ts && ts.scrollIntoView) ts.scrollIntoView({ block: 'nearest' }); }
   announce(sc);
   const fmtTxt = (S.fmt.mode !== 'NORM' ? S.fmt.mode + ' ' : '') + (S.fmt.dec !== 'F' ? 'FIX' + S.fmt.dec : '');
   indL.innerHTML = (ST.second ? '<span class="tag s2on">2nd</span>' : '') + (cur().type === 'home' && ST.ed.ow ? '<span class="tag">INS</span>' : '');

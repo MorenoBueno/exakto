@@ -39,7 +39,7 @@ Many school and university calculators work exactly (`2/3 + 1/4 = 11/12`, `√12
 - **Offline and installable (PWA)** – no server, no tracking, no dependencies. Also available as **one single HTML file** (`exakto.html`).
 
 <div align="center">
-<img src="docs/screenshot-graph.png" width="240" alt="Graph mode"> &nbsp; <img src="docs/screenshot-menu-algebra.png" width="240" alt="Algebra menu"> &nbsp; <img src="docs/screenshot-phone.png" width="200" alt="Phone view"><br><img src="docs/screenshot-tools.png" width="520" alt="Electrical tools">
+<img src="docs/screenshot-graph.png" width="240" alt="Graph mode"> &nbsp; <img src="docs/screenshot-menu-algebra.png" width="240" alt="Algebra menu"> &nbsp; <img src="docs/screenshot-phone2.png" width="200" alt="Phone view with subfolder"><br><img src="docs/screenshot-tools.png" width="520" alt="Electrical tools">
 </div>
 
 ## Known limits
@@ -60,7 +60,7 @@ Details: [docs/MATH.md](docs/MATH.md) · [docs/ARCHITECTURE.md](docs/ARCHITECTUR
 
 **As an app:** on the Pages address choose “Install” / “Add to Home Screen”.
 
-**Function menu:** the grid icon at the top opens every function by category (CALC, SOLVE, ALGEBRA, STAT, NUM, TOOLS, APP), with a RECENT tab for recently used ones – no 2nd needed. The **blue second-function labels** above the keys are tappable too. Switch to graph/engineering via TOOLS (or `F2`/`F3`). Settings and help are behind the **?** button (or the `?` / `F1` key).
+**Function menu:** the grid icon at the top opens every function as **folders with icons** (Calculate, Solve, Algebra, Statistics, Numbers, Tools, Settings, plus “Recently used”) – no 2nd needed. Folders can contain subfolders (e.g. Calculate › Calculus); `←` goes up one level, `⌂` to the top, the path bar jumps to any level (keyboard: arrows, `Enter`, `clear`/`Esc` = back). The **blue second-function labels** above the keys are tappable too. Switch to graph/engineering via TOOLS (or `F2`/`F3`). Settings and help are behind the **?** button (or the `?` / `F1` key).
 
 ## Development
 
@@ -92,7 +92,7 @@ Your copy will be served at `https://USER.github.io/exakto/`. All paths are rela
 - [x] Graph analysis: zeros, minimum/maximum, intersections, y-intercept; touch support
 - [x] Time limit for long calculations, ⚠ warning when integrals do not converge
 - [x] End-to-end browser tests in CI
-- [x] Categorized function menu, tappable second-function labels
+- [x] Function menu as folders with icons and sublevels, tappable second-function labels
 - [ ] More engineering modules
 - [ ] Abortable calculations via web worker (today: time limit of about 6 seconds), tests on real phones and screen readers
 
